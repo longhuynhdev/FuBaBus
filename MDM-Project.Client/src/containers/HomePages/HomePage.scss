@@ -24,7 +24,8 @@ input[type=number]::-webkit-outer-spin-button {
 
 main {
     width: 100%;
-
+    background-color: #fff;
+    min-height: 200vh;
     .main-layout {
         position: relative;
         display: flex;

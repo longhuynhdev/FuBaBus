@@ -9,19 +9,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@SpringBootApplication
-
-
-//@EnableRedisRepositories(
-//        basePackages = "org.example.mdmprojectserver.redis.repository",
-//        excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "org\\.example\\.mdmprojectserver\\.(jpa|mongodb)\\.repository\\..*")
-//)
+@SpringBootApplication(exclude = {
+    org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration.class,
+    org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration.class
+})
 
 @EnableMongoRepositories(
-        basePackages = "org.example.mdmprojectserver.mongodb.repository",
-        excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "org\\.example\\.mdmprojectserver\\.(jpa|redis)\\.repository\\..*")
+    basePackages = "org.example.mdmprojectserver.mongodb.repository"
 )
-
 
 @OpenAPIDefinition(info = @Info(title = "MDM Project API", version = "1.0", description = "MDM Project API"))
 public class Application implements CommandLineRunner {
