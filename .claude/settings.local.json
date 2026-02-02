@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(bun add:*)",
+      "Bash(bunx shadcn@latest add:*)",
+      "Bash(bun run build)",
+      "Bash(timeout 10 bun run dev:*)"
+    ]
+  }
+}

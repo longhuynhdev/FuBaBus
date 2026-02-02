@@ -11,20 +11,83 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as AboutImport } from './routes/about'
+import { Route as TraCuuVeImport } from './routes/tra-cuu-ve'
+import { Route as TicketPurchaseHistoryImport } from './routes/ticket-purchase-history'
+import { Route as ResetPasswordImport } from './routes/reset-password'
+import { Route as RegisterImport } from './routes/register'
+import { Route as PaymentImport } from './routes/payment'
+import { Route as LoginImport } from './routes/login'
+import { Route as LichTrinhImport } from './routes/lich-trinh'
+import { Route as InformationImport } from './routes/information'
+import { Route as HoaDonImport } from './routes/hoa-don'
 import { Route as IndexImport } from './routes/index'
+import { Route as BookingIdImport } from './routes/booking.$id'
 
 // Create/Update Routes
 
-const AboutRoute = AboutImport.update({
-  id: '/about',
-  path: '/about',
+const TraCuuVeRoute = TraCuuVeImport.update({
+  id: '/tra-cuu-ve',
+  path: '/tra-cuu-ve',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TicketPurchaseHistoryRoute = TicketPurchaseHistoryImport.update({
+  id: '/ticket-purchase-history',
+  path: '/ticket-purchase-history',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ResetPasswordRoute = ResetPasswordImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RegisterRoute = RegisterImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PaymentRoute = PaymentImport.update({
+  id: '/payment',
+  path: '/payment',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LichTrinhRoute = LichTrinhImport.update({
+  id: '/lich-trinh',
+  path: '/lich-trinh',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const InformationRoute = InformationImport.update({
+  id: '/information',
+  path: '/information',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const HoaDonRoute = HoaDonImport.update({
+  id: '/hoa-don',
+  path: '/hoa-don',
   getParentRoute: () => rootRoute,
 } as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const BookingIdRoute = BookingIdImport.update({
+  id: '/booking/$id',
+  path: '/booking/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -39,11 +102,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutImport
+    '/hoa-don': {
+      id: '/hoa-don'
+      path: '/hoa-don'
+      fullPath: '/hoa-don'
+      preLoaderRoute: typeof HoaDonImport
+      parentRoute: typeof rootRoute
+    }
+    '/information': {
+      id: '/information'
+      path: '/information'
+      fullPath: '/information'
+      preLoaderRoute: typeof InformationImport
+      parentRoute: typeof rootRoute
+    }
+    '/lich-trinh': {
+      id: '/lich-trinh'
+      path: '/lich-trinh'
+      fullPath: '/lich-trinh'
+      preLoaderRoute: typeof LichTrinhImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/payment': {
+      id: '/payment'
+      path: '/payment'
+      fullPath: '/payment'
+      preLoaderRoute: typeof PaymentImport
+      parentRoute: typeof rootRoute
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterImport
+      parentRoute: typeof rootRoute
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordImport
+      parentRoute: typeof rootRoute
+    }
+    '/ticket-purchase-history': {
+      id: '/ticket-purchase-history'
+      path: '/ticket-purchase-history'
+      fullPath: '/ticket-purchase-history'
+      preLoaderRoute: typeof TicketPurchaseHistoryImport
+      parentRoute: typeof rootRoute
+    }
+    '/tra-cuu-ve': {
+      id: '/tra-cuu-ve'
+      path: '/tra-cuu-ve'
+      fullPath: '/tra-cuu-ve'
+      preLoaderRoute: typeof TraCuuVeImport
+      parentRoute: typeof rootRoute
+    }
+    '/booking/$id': {
+      id: '/booking/$id'
+      path: '/booking/$id'
+      fullPath: '/booking/$id'
+      preLoaderRoute: typeof BookingIdImport
       parentRoute: typeof rootRoute
     }
   }
@@ -53,37 +179,116 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/hoa-don': typeof HoaDonRoute
+  '/information': typeof InformationRoute
+  '/lich-trinh': typeof LichTrinhRoute
+  '/login': typeof LoginRoute
+  '/payment': typeof PaymentRoute
+  '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/ticket-purchase-history': typeof TicketPurchaseHistoryRoute
+  '/tra-cuu-ve': typeof TraCuuVeRoute
+  '/booking/$id': typeof BookingIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/hoa-don': typeof HoaDonRoute
+  '/information': typeof InformationRoute
+  '/lich-trinh': typeof LichTrinhRoute
+  '/login': typeof LoginRoute
+  '/payment': typeof PaymentRoute
+  '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/ticket-purchase-history': typeof TicketPurchaseHistoryRoute
+  '/tra-cuu-ve': typeof TraCuuVeRoute
+  '/booking/$id': typeof BookingIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/hoa-don': typeof HoaDonRoute
+  '/information': typeof InformationRoute
+  '/lich-trinh': typeof LichTrinhRoute
+  '/login': typeof LoginRoute
+  '/payment': typeof PaymentRoute
+  '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/ticket-purchase-history': typeof TicketPurchaseHistoryRoute
+  '/tra-cuu-ve': typeof TraCuuVeRoute
+  '/booking/$id': typeof BookingIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths:
+    | '/'
+    | '/hoa-don'
+    | '/information'
+    | '/lich-trinh'
+    | '/login'
+    | '/payment'
+    | '/register'
+    | '/reset-password'
+    | '/ticket-purchase-history'
+    | '/tra-cuu-ve'
+    | '/booking/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to:
+    | '/'
+    | '/hoa-don'
+    | '/information'
+    | '/lich-trinh'
+    | '/login'
+    | '/payment'
+    | '/register'
+    | '/reset-password'
+    | '/ticket-purchase-history'
+    | '/tra-cuu-ve'
+    | '/booking/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/hoa-don'
+    | '/information'
+    | '/lich-trinh'
+    | '/login'
+    | '/payment'
+    | '/register'
+    | '/reset-password'
+    | '/ticket-purchase-history'
+    | '/tra-cuu-ve'
+    | '/booking/$id'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
+  HoaDonRoute: typeof HoaDonRoute
+  InformationRoute: typeof InformationRoute
+  LichTrinhRoute: typeof LichTrinhRoute
+  LoginRoute: typeof LoginRoute
+  PaymentRoute: typeof PaymentRoute
+  RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  TicketPurchaseHistoryRoute: typeof TicketPurchaseHistoryRoute
+  TraCuuVeRoute: typeof TraCuuVeRoute
+  BookingIdRoute: typeof BookingIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
+  HoaDonRoute: HoaDonRoute,
+  InformationRoute: InformationRoute,
+  LichTrinhRoute: LichTrinhRoute,
+  LoginRoute: LoginRoute,
+  PaymentRoute: PaymentRoute,
+  RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  TicketPurchaseHistoryRoute: TicketPurchaseHistoryRoute,
+  TraCuuVeRoute: TraCuuVeRoute,
+  BookingIdRoute: BookingIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,14 +302,50 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/about"
+        "/hoa-don",
+        "/information",
+        "/lich-trinh",
+        "/login",
+        "/payment",
+        "/register",
+        "/reset-password",
+        "/ticket-purchase-history",
+        "/tra-cuu-ve",
+        "/booking/$id"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/about": {
-      "filePath": "about.tsx"
+    "/hoa-don": {
+      "filePath": "hoa-don.tsx"
+    },
+    "/information": {
+      "filePath": "information.tsx"
+    },
+    "/lich-trinh": {
+      "filePath": "lich-trinh.tsx"
+    },
+    "/login": {
+      "filePath": "login.tsx"
+    },
+    "/payment": {
+      "filePath": "payment.tsx"
+    },
+    "/register": {
+      "filePath": "register.tsx"
+    },
+    "/reset-password": {
+      "filePath": "reset-password.tsx"
+    },
+    "/ticket-purchase-history": {
+      "filePath": "ticket-purchase-history.tsx"
+    },
+    "/tra-cuu-ve": {
+      "filePath": "tra-cuu-ve.tsx"
+    },
+    "/booking/$id": {
+      "filePath": "booking.$id.tsx"
     }
   }
 }
