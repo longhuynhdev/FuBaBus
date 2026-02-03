@@ -10,290 +10,290 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as TicketPurchaseHistoryImport } from './routes/ticket-purchase-history'
-import { Route as ScheduleImport } from './routes/schedule'
-import { Route as ResetPasswordImport } from './routes/reset-password'
-import { Route as RegisterImport } from './routes/register'
-import { Route as PaymentImport } from './routes/payment'
-import { Route as LookupTicketImport } from './routes/lookup-ticket'
-import { Route as LoginImport } from './routes/login'
-import { Route as InvoiceImport } from './routes/invoice'
-import { Route as InformationImport } from './routes/information'
-import { Route as IndexImport } from './routes/index'
-import { Route as BookingIdImport } from './routes/booking.$id'
+import { Route as rootRoute } from "./routes/__root";
+import { Route as BookingIdImport } from "./routes/booking.$id";
+import { Route as IndexImport } from "./routes/index";
+import { Route as InformationImport } from "./routes/information";
+import { Route as InvoiceImport } from "./routes/invoice";
+import { Route as LoginImport } from "./routes/login";
+import { Route as LookupTicketImport } from "./routes/lookup-ticket";
+import { Route as PaymentImport } from "./routes/payment";
+import { Route as RegisterImport } from "./routes/register";
+import { Route as ResetPasswordImport } from "./routes/reset-password";
+import { Route as ScheduleImport } from "./routes/schedule";
+import { Route as TicketPurchaseHistoryImport } from "./routes/ticket-purchase-history";
 
 // Create/Update Routes
 
 const TicketPurchaseHistoryRoute = TicketPurchaseHistoryImport.update({
-  id: '/ticket-purchase-history',
-  path: '/ticket-purchase-history',
-  getParentRoute: () => rootRoute,
-} as any)
+	id: "/ticket-purchase-history",
+	path: "/ticket-purchase-history",
+	getParentRoute: () => rootRoute,
+} as any);
 
 const ScheduleRoute = ScheduleImport.update({
-  id: '/schedule',
-  path: '/schedule',
-  getParentRoute: () => rootRoute,
-} as any)
+	id: "/schedule",
+	path: "/schedule",
+	getParentRoute: () => rootRoute,
+} as any);
 
 const ResetPasswordRoute = ResetPasswordImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRoute,
-} as any)
+	id: "/reset-password",
+	path: "/reset-password",
+	getParentRoute: () => rootRoute,
+} as any);
 
 const RegisterRoute = RegisterImport.update({
-  id: '/register',
-  path: '/register',
-  getParentRoute: () => rootRoute,
-} as any)
+	id: "/register",
+	path: "/register",
+	getParentRoute: () => rootRoute,
+} as any);
 
 const PaymentRoute = PaymentImport.update({
-  id: '/payment',
-  path: '/payment',
-  getParentRoute: () => rootRoute,
-} as any)
+	id: "/payment",
+	path: "/payment",
+	getParentRoute: () => rootRoute,
+} as any);
 
 const LookupTicketRoute = LookupTicketImport.update({
-  id: '/lookup-ticket',
-  path: '/lookup-ticket',
-  getParentRoute: () => rootRoute,
-} as any)
+	id: "/lookup-ticket",
+	path: "/lookup-ticket",
+	getParentRoute: () => rootRoute,
+} as any);
 
 const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
+	id: "/login",
+	path: "/login",
+	getParentRoute: () => rootRoute,
+} as any);
 
 const InvoiceRoute = InvoiceImport.update({
-  id: '/invoice',
-  path: '/invoice',
-  getParentRoute: () => rootRoute,
-} as any)
+	id: "/invoice",
+	path: "/invoice",
+	getParentRoute: () => rootRoute,
+} as any);
 
 const InformationRoute = InformationImport.update({
-  id: '/information',
-  path: '/information',
-  getParentRoute: () => rootRoute,
-} as any)
+	id: "/information",
+	path: "/information",
+	getParentRoute: () => rootRoute,
+} as any);
 
 const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
+	id: "/",
+	path: "/",
+	getParentRoute: () => rootRoute,
+} as any);
 
 const BookingIdRoute = BookingIdImport.update({
-  id: '/booking/$id',
-  path: '/booking/$id',
-  getParentRoute: () => rootRoute,
-} as any)
+	id: "/booking/$id",
+	path: "/booking/$id",
+	getParentRoute: () => rootRoute,
+} as any);
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/information': {
-      id: '/information'
-      path: '/information'
-      fullPath: '/information'
-      preLoaderRoute: typeof InformationImport
-      parentRoute: typeof rootRoute
-    }
-    '/invoice': {
-      id: '/invoice'
-      path: '/invoice'
-      fullPath: '/invoice'
-      preLoaderRoute: typeof InvoiceImport
-      parentRoute: typeof rootRoute
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/lookup-ticket': {
-      id: '/lookup-ticket'
-      path: '/lookup-ticket'
-      fullPath: '/lookup-ticket'
-      preLoaderRoute: typeof LookupTicketImport
-      parentRoute: typeof rootRoute
-    }
-    '/payment': {
-      id: '/payment'
-      path: '/payment'
-      fullPath: '/payment'
-      preLoaderRoute: typeof PaymentImport
-      parentRoute: typeof rootRoute
-    }
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterImport
-      parentRoute: typeof rootRoute
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordImport
-      parentRoute: typeof rootRoute
-    }
-    '/schedule': {
-      id: '/schedule'
-      path: '/schedule'
-      fullPath: '/schedule'
-      preLoaderRoute: typeof ScheduleImport
-      parentRoute: typeof rootRoute
-    }
-    '/ticket-purchase-history': {
-      id: '/ticket-purchase-history'
-      path: '/ticket-purchase-history'
-      fullPath: '/ticket-purchase-history'
-      preLoaderRoute: typeof TicketPurchaseHistoryImport
-      parentRoute: typeof rootRoute
-    }
-    '/booking/$id': {
-      id: '/booking/$id'
-      path: '/booking/$id'
-      fullPath: '/booking/$id'
-      preLoaderRoute: typeof BookingIdImport
-      parentRoute: typeof rootRoute
-    }
-  }
+declare module "@tanstack/react-router" {
+	interface FileRoutesByPath {
+		"/": {
+			id: "/";
+			path: "/";
+			fullPath: "/";
+			preLoaderRoute: typeof IndexImport;
+			parentRoute: typeof rootRoute;
+		};
+		"/information": {
+			id: "/information";
+			path: "/information";
+			fullPath: "/information";
+			preLoaderRoute: typeof InformationImport;
+			parentRoute: typeof rootRoute;
+		};
+		"/invoice": {
+			id: "/invoice";
+			path: "/invoice";
+			fullPath: "/invoice";
+			preLoaderRoute: typeof InvoiceImport;
+			parentRoute: typeof rootRoute;
+		};
+		"/login": {
+			id: "/login";
+			path: "/login";
+			fullPath: "/login";
+			preLoaderRoute: typeof LoginImport;
+			parentRoute: typeof rootRoute;
+		};
+		"/lookup-ticket": {
+			id: "/lookup-ticket";
+			path: "/lookup-ticket";
+			fullPath: "/lookup-ticket";
+			preLoaderRoute: typeof LookupTicketImport;
+			parentRoute: typeof rootRoute;
+		};
+		"/payment": {
+			id: "/payment";
+			path: "/payment";
+			fullPath: "/payment";
+			preLoaderRoute: typeof PaymentImport;
+			parentRoute: typeof rootRoute;
+		};
+		"/register": {
+			id: "/register";
+			path: "/register";
+			fullPath: "/register";
+			preLoaderRoute: typeof RegisterImport;
+			parentRoute: typeof rootRoute;
+		};
+		"/reset-password": {
+			id: "/reset-password";
+			path: "/reset-password";
+			fullPath: "/reset-password";
+			preLoaderRoute: typeof ResetPasswordImport;
+			parentRoute: typeof rootRoute;
+		};
+		"/schedule": {
+			id: "/schedule";
+			path: "/schedule";
+			fullPath: "/schedule";
+			preLoaderRoute: typeof ScheduleImport;
+			parentRoute: typeof rootRoute;
+		};
+		"/ticket-purchase-history": {
+			id: "/ticket-purchase-history";
+			path: "/ticket-purchase-history";
+			fullPath: "/ticket-purchase-history";
+			preLoaderRoute: typeof TicketPurchaseHistoryImport;
+			parentRoute: typeof rootRoute;
+		};
+		"/booking/$id": {
+			id: "/booking/$id";
+			path: "/booking/$id";
+			fullPath: "/booking/$id";
+			preLoaderRoute: typeof BookingIdImport;
+			parentRoute: typeof rootRoute;
+		};
+	}
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/information': typeof InformationRoute
-  '/invoice': typeof InvoiceRoute
-  '/login': typeof LoginRoute
-  '/lookup-ticket': typeof LookupTicketRoute
-  '/payment': typeof PaymentRoute
-  '/register': typeof RegisterRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/schedule': typeof ScheduleRoute
-  '/ticket-purchase-history': typeof TicketPurchaseHistoryRoute
-  '/booking/$id': typeof BookingIdRoute
+	"/": typeof IndexRoute;
+	"/information": typeof InformationRoute;
+	"/invoice": typeof InvoiceRoute;
+	"/login": typeof LoginRoute;
+	"/lookup-ticket": typeof LookupTicketRoute;
+	"/payment": typeof PaymentRoute;
+	"/register": typeof RegisterRoute;
+	"/reset-password": typeof ResetPasswordRoute;
+	"/schedule": typeof ScheduleRoute;
+	"/ticket-purchase-history": typeof TicketPurchaseHistoryRoute;
+	"/booking/$id": typeof BookingIdRoute;
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/information': typeof InformationRoute
-  '/invoice': typeof InvoiceRoute
-  '/login': typeof LoginRoute
-  '/lookup-ticket': typeof LookupTicketRoute
-  '/payment': typeof PaymentRoute
-  '/register': typeof RegisterRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/schedule': typeof ScheduleRoute
-  '/ticket-purchase-history': typeof TicketPurchaseHistoryRoute
-  '/booking/$id': typeof BookingIdRoute
+	"/": typeof IndexRoute;
+	"/information": typeof InformationRoute;
+	"/invoice": typeof InvoiceRoute;
+	"/login": typeof LoginRoute;
+	"/lookup-ticket": typeof LookupTicketRoute;
+	"/payment": typeof PaymentRoute;
+	"/register": typeof RegisterRoute;
+	"/reset-password": typeof ResetPasswordRoute;
+	"/schedule": typeof ScheduleRoute;
+	"/ticket-purchase-history": typeof TicketPurchaseHistoryRoute;
+	"/booking/$id": typeof BookingIdRoute;
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/information': typeof InformationRoute
-  '/invoice': typeof InvoiceRoute
-  '/login': typeof LoginRoute
-  '/lookup-ticket': typeof LookupTicketRoute
-  '/payment': typeof PaymentRoute
-  '/register': typeof RegisterRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/schedule': typeof ScheduleRoute
-  '/ticket-purchase-history': typeof TicketPurchaseHistoryRoute
-  '/booking/$id': typeof BookingIdRoute
+	__root__: typeof rootRoute;
+	"/": typeof IndexRoute;
+	"/information": typeof InformationRoute;
+	"/invoice": typeof InvoiceRoute;
+	"/login": typeof LoginRoute;
+	"/lookup-ticket": typeof LookupTicketRoute;
+	"/payment": typeof PaymentRoute;
+	"/register": typeof RegisterRoute;
+	"/reset-password": typeof ResetPasswordRoute;
+	"/schedule": typeof ScheduleRoute;
+	"/ticket-purchase-history": typeof TicketPurchaseHistoryRoute;
+	"/booking/$id": typeof BookingIdRoute;
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/information'
-    | '/invoice'
-    | '/login'
-    | '/lookup-ticket'
-    | '/payment'
-    | '/register'
-    | '/reset-password'
-    | '/schedule'
-    | '/ticket-purchase-history'
-    | '/booking/$id'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/information'
-    | '/invoice'
-    | '/login'
-    | '/lookup-ticket'
-    | '/payment'
-    | '/register'
-    | '/reset-password'
-    | '/schedule'
-    | '/ticket-purchase-history'
-    | '/booking/$id'
-  id:
-    | '__root__'
-    | '/'
-    | '/information'
-    | '/invoice'
-    | '/login'
-    | '/lookup-ticket'
-    | '/payment'
-    | '/register'
-    | '/reset-password'
-    | '/schedule'
-    | '/ticket-purchase-history'
-    | '/booking/$id'
-  fileRoutesById: FileRoutesById
+	fileRoutesByFullPath: FileRoutesByFullPath;
+	fullPaths:
+		| "/"
+		| "/information"
+		| "/invoice"
+		| "/login"
+		| "/lookup-ticket"
+		| "/payment"
+		| "/register"
+		| "/reset-password"
+		| "/schedule"
+		| "/ticket-purchase-history"
+		| "/booking/$id";
+	fileRoutesByTo: FileRoutesByTo;
+	to:
+		| "/"
+		| "/information"
+		| "/invoice"
+		| "/login"
+		| "/lookup-ticket"
+		| "/payment"
+		| "/register"
+		| "/reset-password"
+		| "/schedule"
+		| "/ticket-purchase-history"
+		| "/booking/$id";
+	id:
+		| "__root__"
+		| "/"
+		| "/information"
+		| "/invoice"
+		| "/login"
+		| "/lookup-ticket"
+		| "/payment"
+		| "/register"
+		| "/reset-password"
+		| "/schedule"
+		| "/ticket-purchase-history"
+		| "/booking/$id";
+	fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  InformationRoute: typeof InformationRoute
-  InvoiceRoute: typeof InvoiceRoute
-  LoginRoute: typeof LoginRoute
-  LookupTicketRoute: typeof LookupTicketRoute
-  PaymentRoute: typeof PaymentRoute
-  RegisterRoute: typeof RegisterRoute
-  ResetPasswordRoute: typeof ResetPasswordRoute
-  ScheduleRoute: typeof ScheduleRoute
-  TicketPurchaseHistoryRoute: typeof TicketPurchaseHistoryRoute
-  BookingIdRoute: typeof BookingIdRoute
+	IndexRoute: typeof IndexRoute;
+	InformationRoute: typeof InformationRoute;
+	InvoiceRoute: typeof InvoiceRoute;
+	LoginRoute: typeof LoginRoute;
+	LookupTicketRoute: typeof LookupTicketRoute;
+	PaymentRoute: typeof PaymentRoute;
+	RegisterRoute: typeof RegisterRoute;
+	ResetPasswordRoute: typeof ResetPasswordRoute;
+	ScheduleRoute: typeof ScheduleRoute;
+	TicketPurchaseHistoryRoute: typeof TicketPurchaseHistoryRoute;
+	BookingIdRoute: typeof BookingIdRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  InformationRoute: InformationRoute,
-  InvoiceRoute: InvoiceRoute,
-  LoginRoute: LoginRoute,
-  LookupTicketRoute: LookupTicketRoute,
-  PaymentRoute: PaymentRoute,
-  RegisterRoute: RegisterRoute,
-  ResetPasswordRoute: ResetPasswordRoute,
-  ScheduleRoute: ScheduleRoute,
-  TicketPurchaseHistoryRoute: TicketPurchaseHistoryRoute,
-  BookingIdRoute: BookingIdRoute,
-}
+	IndexRoute: IndexRoute,
+	InformationRoute: InformationRoute,
+	InvoiceRoute: InvoiceRoute,
+	LoginRoute: LoginRoute,
+	LookupTicketRoute: LookupTicketRoute,
+	PaymentRoute: PaymentRoute,
+	RegisterRoute: RegisterRoute,
+	ResetPasswordRoute: ResetPasswordRoute,
+	ScheduleRoute: ScheduleRoute,
+	TicketPurchaseHistoryRoute: TicketPurchaseHistoryRoute,
+	BookingIdRoute: BookingIdRoute,
+};
 
 export const routeTree = rootRoute
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+	._addFileChildren(rootRouteChildren)
+	._addFileTypes<FileRouteTypes>();
 
 /* ROUTE_MANIFEST_START
 {
