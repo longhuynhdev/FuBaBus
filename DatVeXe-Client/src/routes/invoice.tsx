@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/layout/header";
 import { InvoiceLookup } from "@/components/lookup/invoice-lookup";
 
-export const Route = createFileRoute("/hoa-don")({
+export const Route = createFileRoute("/invoice")({
   component: InvoicePage,
 });
 

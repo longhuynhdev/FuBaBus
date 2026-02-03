@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/contexts/auth-context";
 import { User, ChevronDown, History, KeyRound, LogOut } from "lucide-react";
 import {
@@ -8,29 +8,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 
-interface NavLinkProps {
-  to: string;
-  children: React.ReactNode;
-}
-
-function NavLink({ to, children }: NavLinkProps) {
-  const location = useLocation();
-  const isActive = location.pathname === to;
-
-  return (
-    <Link
-      to={to}
-      className={cn(
-        "mx-2 w-32 pb-3 px-2.5 text-center font-semibold text-base uppercase text-white hover:font-extrabold hover:text-gray-200",
-        isActive && "font-extrabold border-b-4 border-white",
-      )}
-    >
-      {children}
-    </Link>
-  );
-}
+const navLinkClass =
+  "mx-2 w-32 pb-3 px-2.5 text-center font-semibold text-base uppercase text-white hover:font-extrabold hover:text-gray-200";
+const navLinkActiveClass = "font-extrabold border-b-4 border-white";
 
 export function Header() {
   const { isLoggedIn, logout } = useAuth();
@@ -132,10 +113,18 @@ export function Header() {
 
       {/* Navigation menu */}
       <nav className="flex justify-around items-center px-[100px]">
-        <NavLink to="/">Trang chủ</NavLink>
-        <NavLink to="/lich-trinh">Lịch trình</NavLink>
-        <NavLink to="/tra-cuu-ve">Tra cứu vé</NavLink>
-        <NavLink to="/hoa-don">Hóa đơn</NavLink>
+        <Link to="/" className={navLinkClass} activeProps={{ className: navLinkActiveClass }}>
+          Trang chủ
+        </Link>
+        <Link to="/schedule" className={navLinkClass} activeProps={{ className: navLinkActiveClass }}>
+          Lịch trình
+        </Link>
+        <Link to="/lookup-ticket" className={navLinkClass} activeProps={{ className: navLinkActiveClass }}>
+          Tra cứu vé
+        </Link>
+        <Link to="/invoice" className={navLinkClass} activeProps={{ className: navLinkActiveClass }}>
+          Hóa đơn
+        </Link>
       </nav>
     </header>
   );

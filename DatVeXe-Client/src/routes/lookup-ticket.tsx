@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/layout/header";
 import { TicketLookup } from "@/components/lookup/ticket-lookup";
 
-export const Route = createFileRoute("/tra-cuu-ve")({
+export const Route = createFileRoute("/lookup-ticket")({
   component: LookupTicketPage,
 });
 
