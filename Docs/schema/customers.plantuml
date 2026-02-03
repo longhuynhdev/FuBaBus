@@ -1,0 +1,11 @@
+@startjson
+{
+    "_id":"ObjectId('67...6d5')",
+    "name": "Long Huỳnh",
+    "gender": ["MALE","FEMALE"],
+    "email": "longhuynhdev@gmail.com",
+    "phone": "0888703040",
+    "password": "hashed_password",
+    "role": ["USER","ADMIN"]
+}
+@endjson
