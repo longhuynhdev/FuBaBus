@@ -30,7 +30,7 @@ function Index() {
 					<img
 						src={bannerImage}
 						alt="Banner"
-						className="w-full h-auto rounded-2xl object-cover"
+						className="object-cover w-full h-auto rounded-2xl"
 					/>
 				</div>
 

@@ -68,7 +68,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 	};
 
 	return (
-		<div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+		<div className="p-6 bg-white border border-gray-200 shadow-lg rounded-2xl">
 			{/* Trip type selection */}
 			<div className="flex items-center justify-between mb-6">
 				<RadioGroup
@@ -91,7 +91,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 						</Label>
 					</div>
 				</RadioGroup>
-				<span className="text-orange-600 cursor-pointer hover:underline text-sm">
+				<span className="text-sm text-orange-600 cursor-pointer hover:underline">
 					Hướng dẫn mua vé
 				</span>
 			</div>
@@ -100,7 +100,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 			<div className="flex items-end gap-3">
 				{/* Departure location */}
 				<div className="flex-1 min-w-[180px]">
-					<Label className="text-sm text-gray-600 mb-2 block">Điểm đi</Label>
+					<Label className="block mb-2 text-sm text-gray-600">Điểm đi</Label>
 					<Select
 						value={departureLocation}
 						onValueChange={setDepartureLocation}
@@ -127,15 +127,15 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 						variant="ghost"
 						size="icon"
 						onClick={swapLocations}
-						className="rounded-full hover:bg-orange-100 h-10 w-10"
+						className="w-10 h-10 rounded-full hover:bg-orange-100"
 					>
-						<ArrowLeftRight className="h-5 w-5 text-orange-600" />
+						<ArrowLeftRight className="w-5 h-5 text-orange-600" />
 					</Button>
 				</div>
 
 				{/* Arrival location */}
 				<div className="flex-1 min-w-[180px]">
-					<Label className="text-sm text-gray-600 mb-2 block">Điểm đến</Label>
+					<Label className="block mb-2 text-sm text-gray-600">Điểm đến</Label>
 					<Select value={arrivalLocation} onValueChange={setArrivalLocation}>
 						<SelectTrigger className="h-12">
 							<SelectValue placeholder="Chọn điểm đến" />
@@ -154,7 +154,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 
 				{/* Departure date */}
 				<div className="w-[160px] flex-shrink-0">
-					<Label className="text-sm text-gray-600 mb-2 block">Ngày đi</Label>
+					<Label className="block mb-2 text-sm text-gray-600">Ngày đi</Label>
 					<Popover>
 						<PopoverTrigger asChild>
 							<Button
@@ -164,7 +164,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 									!departureDate && "text-muted-foreground",
 								)}
 							>
-								<CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+								<CalendarIcon className="flex-shrink-0 w-4 h-4 mr-2" />
 								<span className="truncate">
 									{departureDate
 										? format(departureDate, "dd/MM/yyyy", { locale: vi })
@@ -187,7 +187,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 				{/* Return date (only for round-trip) */}
 				{tripType === "round-trip" && (
 					<div className="w-[160px] flex-shrink-0">
-						<Label className="text-sm text-gray-600 mb-2 block">Ngày về</Label>
+						<Label className="block mb-2 text-sm text-gray-600">Ngày về</Label>
 						<Popover>
 							<PopoverTrigger asChild>
 								<Button
@@ -197,7 +197,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 										!returnDate && "text-muted-foreground",
 									)}
 								>
-									<CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+									<CalendarIcon className="flex-shrink-0 w-4 h-4 mr-2" />
 									<span className="truncate">
 										{returnDate
 											? format(returnDate, "dd/MM/yyyy", { locale: vi })
@@ -220,7 +220,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 
 				{/* Ticket count */}
 				<div className="w-[100px] flex-shrink-0">
-					<Label className="text-sm text-gray-600 mb-2 block">Số vé</Label>
+					<Label className="block mb-2 text-sm text-gray-600">Số vé</Label>
 					<Select value={ticketCount} onValueChange={setTicketCount}>
 						<SelectTrigger className="h-12">
 							<SelectValue />
@@ -240,7 +240,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 			<div className="flex justify-center mt-6">
 				<Button
 					onClick={handleSearch}
-					className="w-48 h-12 rounded-full bg-orange-600 hover:bg-orange-600/90 text-white font-semibold text-base"
+					className="w-48 h-12 text-base font-semibold text-white bg-orange-600 rounded-full hover:bg-orange-600/90"
 				>
 					Tìm chuyến
 				</Button>

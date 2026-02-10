@@ -57,13 +57,13 @@ export function LoginForm() {
 	return (
 		<div className="flex flex-row max-w-[1128px] h-[471px] mx-auto rounded-2xl border border-orange-500/60 outline outline-6 outline-orange-900/5 overflow-hidden bg-white">
 			{/* Banner section - Left side */}
-			<div className="flex-1 hidden md:flex flex-col p-8">
+			<div className="flex-col flex-1 hidden p-8 md:flex">
 				<img
 					src={logoWithTextIcon}
 					alt="Logo"
 					className="h-[77px] w-[366px] object-contain"
 				/>
-				<div className="flex-1 flex items-start justify-start">
+				<div className="flex items-start justify-start flex-1">
 					<img
 						src={TVCIcon}
 						alt="Banner"
@@ -74,7 +74,7 @@ export function LoginForm() {
 
 			{/* Form section - Right side */}
 			<div className="flex flex-col justify-center items-center w-full md:w-[480px] p-8">
-				<h1 className="font-semibold text-2xl leading-8 mb-8">
+				<h1 className="mb-8 text-2xl font-semibold leading-8">
 					Đăng nhập tài khoản
 				</h1>
 
@@ -107,7 +107,7 @@ export function LoginForm() {
 
 					<Button
 						type="submit"
-						className="w-full mt-4 h-11 rounded-full bg-orange-600 hover:bg-orange-600/80 text-white"
+						className="w-full mt-4 text-white bg-orange-600 rounded-full h-11 hover:bg-orange-600/80"
 					>
 						Đăng nhập
 					</Button>

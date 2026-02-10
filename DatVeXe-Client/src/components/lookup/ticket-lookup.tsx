@@ -77,7 +77,7 @@ export function TicketLookup() {
 	return (
 		<>
 			<div className="max-w-md mx-auto">
-				<h1 className="text-2xl font-bold text-center mb-8 uppercase">
+				<h1 className="mb-8 text-2xl font-bold text-center uppercase">
 					Tra cứu thông tin đặt vé
 				</h1>
 
@@ -122,7 +122,7 @@ export function TicketLookup() {
 					{ticketData && (
 						<div className="space-y-6">
 							{/* Basic Info */}
-							<div className="space-y-4 p-4 bg-gray-50 rounded-lg">
+							<div className="p-4 rounded-lg space-y-4 bg-gray-50">
 								<h3 className="font-semibold text-gray-700">
 									Thông tin khách hàng
 								</h3>
@@ -157,7 +157,7 @@ export function TicketLookup() {
 							</div>
 
 							{/* Ticket Details */}
-							<div className="space-y-4 p-4 bg-gray-50 rounded-lg">
+							<div className="p-4 rounded-lg space-y-4 bg-gray-50">
 								<h3 className="font-semibold text-gray-700">Chi tiết vé</h3>
 								<div className="grid grid-cols-2 gap-4">
 									<div>

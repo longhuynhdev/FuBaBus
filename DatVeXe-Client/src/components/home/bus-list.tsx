@@ -74,15 +74,15 @@ export function BusList() {
 	};
 
 	return (
-		<div className="flex gap-6 mt-8">
+		<div className="flex mt-8 gap-6">
 			{/* Filter sidebar */}
-			<div className="w-72 flex-shrink-0">
-				<div className="bg-white rounded-2xl p-6 border border-gray-200">
-					<h2 className="text-lg font-semibold mb-4">Bộ lọc tìm kiếm</h2>
+			<div className="flex-shrink-0 w-72">
+				<div className="p-6 bg-white border border-gray-200 rounded-2xl">
+					<h2 className="mb-4 text-lg font-semibold">Bộ lọc tìm kiếm</h2>
 
 					{/* Time filter */}
 					<div className="mb-6">
-						<h3 className="font-medium mb-3">Giờ đi</h3>
+						<h3 className="mb-3 font-medium">Giờ đi</h3>
 						<RadioGroup value={timeFilter} onValueChange={setTimeFilter}>
 							<div className="space-y-2">
 								<div className="flex items-center space-x-2">
@@ -120,7 +120,7 @@ export function BusList() {
 
 					{/* Bus type filter */}
 					<div>
-						<h3 className="font-medium mb-3">Loại xe</h3>
+						<h3 className="mb-3 font-medium">Loại xe</h3>
 						<RadioGroup value={busTypeFilter} onValueChange={setBusTypeFilter}>
 							<div className="flex flex-wrap gap-4">
 								<div className="flex items-center space-x-2">
@@ -150,7 +150,7 @@ export function BusList() {
 			{/* Bus list */}
 			<div className="flex-1">
 				{/* Quick sort buttons */}
-				<div className="flex gap-4 mb-4">
+				<div className="flex mb-4 gap-4">
 					<RadioGroup
 						value={sortBy}
 						onValueChange={setSortBy}
@@ -170,7 +170,7 @@ export function BusList() {
 										: "bg-white border-gray-300 hover:border-orange-300"
 								}`}
 							>
-								<Banknote className="h-4 w-4" />
+								<Banknote className="w-4 h-4" />
 								Giá tăng dần
 							</Label>
 						</div>
@@ -188,7 +188,7 @@ export function BusList() {
 										: "bg-white border-gray-300 hover:border-orange-300"
 								}`}
 							>
-								<Banknote className="h-4 w-4" />
+								<Banknote className="w-4 h-4" />
 								Giá giảm dần
 							</Label>
 						</div>
@@ -206,7 +206,7 @@ export function BusList() {
 										: "bg-white border-gray-300 hover:border-orange-300"
 								}`}
 							>
-								<Clock className="h-4 w-4" />
+								<Clock className="w-4 h-4" />
 								Giờ sớm nhất
 							</Label>
 						</div>
@@ -224,7 +224,7 @@ export function BusList() {
 										: "bg-white border-gray-300 hover:border-orange-300"
 								}`}
 							>
-								<Clock className="h-4 w-4" />
+								<Clock className="w-4 h-4" />
 								Giờ muộn nhất
 							</Label>
 						</div>
@@ -237,7 +237,7 @@ export function BusList() {
 						<div
 							key={bus.id}
 							onClick={() => handleSelectBus(bus.id)}
-							className="bg-white rounded-2xl p-6 border border-gray-200 hover:border-orange-300 hover:shadow-md cursor-pointer transition-all"
+							className="p-6 bg-white border border-gray-200 cursor-pointer rounded-2xl hover:border-orange-300 hover:shadow-md transition-all"
 						>
 							<div className="flex items-center justify-between">
 								{/* Departure info */}
@@ -245,19 +245,19 @@ export function BusList() {
 									<div className="text-2xl font-bold text-gray-900">
 										{bus.departureTime}
 									</div>
-									<div className="text-sm text-gray-500 mt-1">
+									<div className="mt-1 text-sm text-gray-500">
 										{bus.departureLocation}
 									</div>
 								</div>
 
 								{/* Journey visualization */}
-								<div className="flex-1 mx-8 flex items-center justify-center">
-									<div className="flex items-center gap-2 text-gray-400">
-										<div className="w-3 h-3 rounded-full bg-orange-500" />
+								<div className="flex items-center justify-center flex-1 mx-8">
+									<div className="flex items-center text-gray-400 gap-2">
+										<div className="w-3 h-3 bg-orange-500 rounded-full" />
 										<div className="flex-1 border-t-2 border-dashed border-gray-300 min-w-[100px]" />
 										<div className="text-xs text-gray-500">6 giờ</div>
 										<div className="flex-1 border-t-2 border-dashed border-gray-300 min-w-[100px]" />
-										<div className="w-3 h-3 rounded-full bg-green-500" />
+										<div className="w-3 h-3 bg-green-500 rounded-full" />
 									</div>
 								</div>
 
@@ -266,15 +266,15 @@ export function BusList() {
 									<div className="text-2xl font-bold text-gray-900">
 										{bus.arrivalTime}
 									</div>
-									<div className="text-sm text-gray-500 mt-1">
+									<div className="mt-1 text-sm text-gray-500">
 										{bus.arrivalLocation}
 									</div>
 								</div>
 
 								{/* Bus type */}
 								<div className="mx-8 text-center">
-									<div className="flex items-center gap-2 text-gray-600">
-										<Bus className="h-5 w-5" />
+									<div className="flex items-center text-gray-600 gap-2">
+										<Bus className="w-5 h-5" />
 										<span className="text-sm">{bus.busType}</span>
 									</div>
 								</div>
@@ -284,7 +284,7 @@ export function BusList() {
 									<div className="text-sm text-gray-500">
 										Còn {bus.availableSeats} chỗ
 									</div>
-									<div className="text-xl font-bold text-orange-600 mt-1">
+									<div className="mt-1 text-xl font-bold text-orange-600">
 										{formatPrice(bus.fare)}
 									</div>
 								</div>

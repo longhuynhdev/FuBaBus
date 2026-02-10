@@ -73,7 +73,7 @@ export function InformationForm() {
 				<h1 className="text-2xl font-medium text-gray-900">
 					Thông tin tài khoản
 				</h1>
-				<p className="text-base text-gray-700/80 mt-2">
+				<p className="mt-2 text-base text-gray-700/80">
 					Quản lý thông tin hồ sơ để bảo mật tài khoản
 				</p>
 			</div>
@@ -81,7 +81,7 @@ export function InformationForm() {
 			{/* Form */}
 			<form
 				onSubmit={handleSubmit}
-				className="p-6 rounded-2xl border border-gray-300"
+				className="p-6 border border-gray-300 rounded-2xl"
 			>
 				{/* Name */}
 				<div className="flex items-center mb-4">

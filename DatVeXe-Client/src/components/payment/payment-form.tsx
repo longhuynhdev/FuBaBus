@@ -85,12 +85,12 @@ export function PaymentForm({
 
 	return (
 		<div className="max-w-4xl mx-auto">
-			<div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+			<div className="overflow-hidden bg-white border border-gray-200 rounded-2xl">
 				{/* Header */}
 				<div className="flex items-center justify-between p-4 border-b">
 					<button
 						onClick={handleGoBack}
-						className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+						className="flex items-center text-gray-600 gap-2 hover:text-gray-900 transition-colors"
 					>
 						<ArrowLeft className="w-5 h-5" />
 						<span>Quay lại</span>
@@ -110,7 +110,7 @@ export function PaymentForm({
 					<div className="flex gap-12">
 						{/* Payment methods */}
 						<div className="flex-1">
-							<h2 className="text-xl font-medium mb-6">
+							<h2 className="mb-6 text-xl font-medium">
 								Chọn phương thức thanh toán
 							</h2>
 
@@ -155,11 +155,11 @@ export function PaymentForm({
 						</div>
 
 						{/* Total and timer */}
-						<div className="w-80 text-center">
+						<div className="text-center w-80">
 							<div className="mb-4">
 								<span className="text-gray-600">Tổng thanh toán</span>
 							</div>
-							<div className="text-5xl font-bold text-orange-600 mb-4">
+							<div className="mb-4 text-5xl font-bold text-orange-600">
 								{formatPrice(totalPrice)}
 							</div>
 							<div className="text-sm text-gray-500">
@@ -178,7 +178,7 @@ export function PaymentForm({
 				<div className="p-6 border-t bg-gray-50">
 					<Button
 						onClick={handlePayment}
-						className="w-full h-12 bg-orange-600 hover:bg-orange-600/90 text-white font-semibold text-lg rounded-full"
+						className="w-full h-12 text-lg font-semibold text-white bg-orange-600 rounded-full hover:bg-orange-600/90"
 					>
 						Thanh toán
 					</Button>

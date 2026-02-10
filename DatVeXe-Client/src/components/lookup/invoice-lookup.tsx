@@ -78,7 +78,7 @@ export function InvoiceLookup() {
 	return (
 		<>
 			<div className="max-w-md mx-auto">
-				<h1 className="text-2xl font-bold text-center mb-8 uppercase">
+				<h1 className="mb-8 text-2xl font-bold text-center uppercase">
 					Tra cứu thông tin hóa đơn
 				</h1>
 
@@ -123,7 +123,7 @@ export function InvoiceLookup() {
 					{invoiceData && (
 						<div className="space-y-6">
 							{/* Customer Info */}
-							<div className="space-y-4 p-4 bg-gray-50 rounded-lg">
+							<div className="p-4 rounded-lg space-y-4 bg-gray-50">
 								<h3 className="font-semibold text-gray-700">
 									Thông tin khách hàng
 								</h3>
@@ -182,7 +182,7 @@ export function InvoiceLookup() {
 							</div>
 
 							{/* Invoice Details */}
-							<div className="space-y-4 p-4 bg-gray-50 rounded-lg">
+							<div className="p-4 rounded-lg space-y-4 bg-gray-50">
 								<h3 className="font-semibold text-gray-700">
 									Chi tiết hóa đơn
 								</h3>

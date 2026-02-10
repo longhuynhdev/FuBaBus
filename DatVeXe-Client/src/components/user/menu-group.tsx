@@ -46,23 +46,23 @@ export function MenuGroup() {
 	const menuItems = [
 		{
 			to: "/information",
-			icon: <User className="h-5 w-5" />,
+			icon: <User className="w-5 h-5" />,
 			label: "Thông tin tài khoản",
 		},
 		{
 			to: "/ticket-purchase-history",
-			icon: <History className="h-5 w-5" />,
+			icon: <History className="w-5 h-5" />,
 			label: "Lịch sử mua vé",
 		},
 		{
 			to: "/reset-password",
-			icon: <KeyRound className="h-5 w-5" />,
+			icon: <KeyRound className="w-5 h-5" />,
 			label: "Đặt lại mật khẩu",
 		},
 	];
 
 	return (
-		<div className="block rounded-2xl border border-gray-300 p-2">
+		<div className="block p-2 border border-gray-300 rounded-2xl">
 			{menuItems.map((item) => (
 				<MenuItem
 					key={item.to}
@@ -75,12 +75,12 @@ export function MenuGroup() {
 
 			{/* Logout button */}
 			<div className="cursor-pointer">
-				<div className="rounded-lg px-3 py-2 hover:bg-orange-50">
+				<div className="px-3 py-2 rounded-lg hover:bg-orange-50">
 					<button
 						onClick={handleLogout}
 						className="flex w-full items-center gap-3 p-2 text-[17px] font-medium text-black"
 					>
-						<LogOut className="h-5 w-5" />
+						<LogOut className="w-5 h-5" />
 						<span>Đăng xuất</span>
 					</button>
 				</div>

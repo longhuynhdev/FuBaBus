@@ -37,7 +37,7 @@ export function SeatSelector({
 
 	return (
 		<div>
-			<h3 className="text-lg font-semibold mb-4">Chọn ghế</h3>
+			<h3 className="mb-4 text-lg font-semibold">Chọn ghế</h3>
 
 			<div className="flex gap-8">
 				{/* Seat grid */}
@@ -91,27 +91,27 @@ export function SeatSelector({
 				{/* Legend */}
 				<div className="flex flex-col gap-3">
 					<div className="flex items-center gap-2">
-						<div className="w-6 h-6 rounded bg-gray-300" />
+						<div className="w-6 h-6 bg-gray-300 rounded" />
 						<span className="text-sm text-gray-600">Đã bán</span>
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="w-6 h-6 rounded bg-blue-400" />
+						<div className="w-6 h-6 bg-blue-400 rounded" />
 						<span className="text-sm text-gray-600">Còn trống</span>
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="w-6 h-6 rounded bg-orange-500" />
+						<div className="w-6 h-6 bg-orange-500 rounded" />
 						<span className="text-sm text-gray-600">Đang chọn</span>
 					</div>
 				</div>
 			</div>
 
 			{selectedSeats.length > 0 && (
-				<div className="mt-4 p-3 bg-orange-50 rounded-lg">
+				<div className="p-3 mt-4 rounded-lg bg-orange-50">
 					<span className="text-sm text-gray-600">Ghế đã chọn: </span>
 					<span className="font-medium text-orange-600">
 						{selectedSeats.join(", ")}
 					</span>
-					<span className="text-sm text-gray-500 ml-2">
+					<span className="ml-2 text-sm text-gray-500">
 						({selectedSeats.length}/{maxSeats} ghế)
 					</span>
 				</div>

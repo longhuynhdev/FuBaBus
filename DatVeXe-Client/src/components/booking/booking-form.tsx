@@ -80,7 +80,7 @@ export function BookingForm() {
 			{/* Left column - Form */}
 			<div className="flex-1 space-y-6">
 				{/* Seat selection */}
-				<div className="bg-white rounded-2xl p-6 border border-gray-200">
+				<div className="p-6 bg-white border border-gray-200 rounded-2xl">
 					<SeatSelector
 						seats={mockBusData.seats}
 						maxSeats={5}
@@ -89,8 +89,8 @@ export function BookingForm() {
 				</div>
 
 				{/* Customer information */}
-				<div className="bg-white rounded-2xl p-6 border border-gray-200">
-					<h3 className="text-lg font-semibold mb-4">Thông tin khách hàng</h3>
+				<div className="p-6 bg-white border border-gray-200 rounded-2xl">
+					<h3 className="mb-4 text-lg font-semibold">Thông tin khách hàng</h3>
 					<div className="space-y-4">
 						<div>
 							<Label htmlFor="name" className="text-sm">
@@ -134,8 +134,8 @@ export function BookingForm() {
 				</div>
 
 				{/* Pickup/Dropoff points */}
-				<div className="bg-white rounded-2xl p-6 border border-gray-200">
-					<h3 className="text-lg font-semibold mb-4">Thông tin đón trả</h3>
+				<div className="p-6 bg-white border border-gray-200 rounded-2xl">
+					<h3 className="mb-4 text-lg font-semibold">Thông tin đón trả</h3>
 					<div className="grid grid-cols-2 gap-6">
 						<div>
 							<Label className="text-sm font-medium text-gray-700">
@@ -175,7 +175,7 @@ export function BookingForm() {
 				</div>
 
 				{/* Payment buttons */}
-				<div className="bg-white rounded-2xl p-6 border border-gray-200">
+				<div className="p-6 bg-white border border-gray-200 rounded-2xl">
 					<div className="flex items-center justify-between">
 						<div>
 							<span className="text-gray-600">Tổng thanh toán: </span>
@@ -190,7 +190,7 @@ export function BookingForm() {
 							<Button
 								onClick={handlePayment}
 								disabled={selectedSeats.length === 0}
-								className="bg-orange-600 hover:bg-orange-600/90 text-white"
+								className="text-white bg-orange-600 hover:bg-orange-600/90"
 							>
 								Thanh toán
 							</Button>
@@ -200,11 +200,11 @@ export function BookingForm() {
 			</div>
 
 			{/* Right column - Trip info */}
-			<div className="w-80 flex-shrink-0 space-y-6">
+			<div className="flex-shrink-0 w-80 space-y-6">
 				{/* Trip details */}
-				<div className="bg-white rounded-2xl p-6 border border-gray-200">
-					<h3 className="text-lg font-semibold mb-4">Thông tin lượt đi</h3>
-					<div className="space-y-3 text-sm">
+				<div className="p-6 bg-white border border-gray-200 rounded-2xl">
+					<h3 className="mb-4 text-lg font-semibold">Thông tin lượt đi</h3>
+					<div className="text-sm space-y-3">
 						<div className="flex justify-between">
 							<span className="text-gray-600">Tuyến xe đi</span>
 							<span className="font-medium">
@@ -241,9 +241,9 @@ export function BookingForm() {
 				</div>
 
 				{/* Price details */}
-				<div className="bg-white rounded-2xl p-6 border border-gray-200">
-					<h3 className="text-lg font-semibold mb-4">Chi tiết giá</h3>
-					<div className="space-y-3 text-sm">
+				<div className="p-6 bg-white border border-gray-200 rounded-2xl">
+					<h3 className="mb-4 text-lg font-semibold">Chi tiết giá</h3>
+					<div className="text-sm space-y-3">
 						<div className="flex justify-between">
 							<span className="text-gray-600">
 								Giá vé ({selectedSeats.length} ghế)

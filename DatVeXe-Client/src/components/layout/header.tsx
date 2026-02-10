@@ -35,7 +35,7 @@ export function Header() {
 			{/* Top navigation */}
 			<div className="flex h-20 justify-end px-[100px]">
 				{/* Logo */}
-				<div className="mx-20 z-10">
+				<div className="z-10 mx-20">
 					<Link to="/">
 						<img
 							src="https://futabus.vn/_next/static/media/logo_new.8a0251b8.svg"
@@ -47,12 +47,12 @@ export function Header() {
 
 				{/* Login section */}
 				<div className="flex justify-end flex-grow-[0.5] flex-shrink flex-basis-0 mt-4">
-					<div className="flex text-center font-extrabold text-sm leading-5 gap-4 items-start">
+					<div className="flex items-start text-sm font-extrabold text-center leading-5 gap-4">
 						{isLoggedIn ? (
 							<DropdownMenu>
-								<DropdownMenuTrigger className="flex items-center gap-4 h-8 cursor-pointer outline-none">
+								<DropdownMenuTrigger className="flex items-center h-8 outline-none cursor-pointer gap-4">
 									<User className="w-8 h-full text-white" />
-									<span className="text-white font-medium">{userName}</span>
+									<span className="font-medium text-white">{userName}</span>
 									<ChevronDown className="w-4 h-4 text-white" />
 								</DropdownMenuTrigger>
 								<DropdownMenuContent
@@ -62,7 +62,7 @@ export function Header() {
 									<DropdownMenuItem asChild>
 										<Link
 											to="/information"
-											className="flex items-center gap-2 p-2 cursor-pointer"
+											className="flex items-center p-2 cursor-pointer gap-2"
 										>
 											<User className="w-4 h-4" />
 											<span>Thong tin tai khoan</span>
@@ -71,7 +71,7 @@ export function Header() {
 									<DropdownMenuItem asChild>
 										<Link
 											to="/ticket-purchase-history"
-											className="flex items-center gap-2 p-2 cursor-pointer"
+											className="flex items-center p-2 cursor-pointer gap-2"
 										>
 											<History className="w-4 h-4" />
 											<span>Lich su mua ve</span>
@@ -80,7 +80,7 @@ export function Header() {
 									<DropdownMenuItem asChild>
 										<Link
 											to="/reset-password"
-											className="flex items-center gap-2 p-2 cursor-pointer"
+											className="flex items-center p-2 cursor-pointer gap-2"
 										>
 											<KeyRound className="w-4 h-4" />
 											<span>Dat lai mat khau</span>
@@ -88,7 +88,7 @@ export function Header() {
 									</DropdownMenuItem>
 									<DropdownMenuItem
 										onClick={handleLogout}
-										className="flex items-center gap-2 p-2 cursor-pointer"
+										className="flex items-center p-2 cursor-pointer gap-2"
 									>
 										<LogOut className="w-4 h-4" />
 										<span>Dang xuat</span>
@@ -96,7 +96,7 @@ export function Header() {
 								</DropdownMenuContent>
 							</DropdownMenu>
 						) : (
-							<div className="flex items-center w-52 h-8 px-2 gap-3 bg-white rounded-2xl text-black">
+							<div className="flex items-center h-8 px-2 text-black bg-white w-52 gap-3 rounded-2xl">
 								<User className="w-5 h-5" />
 								<Link to="/login" className="text-black hover:text-blue-500">
 									Đăng nhập
