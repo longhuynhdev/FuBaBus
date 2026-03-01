@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
-import { ArrowLeftRight, CalendarIcon } from "lucide-react";
+import { ArrowLeftRight } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -105,7 +105,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 						value={departureLocation}
 						onValueChange={setDepartureLocation}
 					>
-						<SelectTrigger className="h-12">
+						<SelectTrigger className="w-full data-[size=default]:h-16 text-base">
 							<SelectValue placeholder="Chọn điểm đi" />
 						</SelectTrigger>
 						<SelectContent>
@@ -121,13 +121,14 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 				</div>
 
 				{/* Swap button */}
-				<div className="flex-shrink-0 pb-1">
+				<div className="flex-shrink-0">
+					<span className="invisible block mb-2 text-sm">‎</span>
 					<Button
 						type="button"
 						variant="ghost"
 						size="icon"
 						onClick={swapLocations}
-						className="w-10 h-10 rounded-full hover:bg-orange-100"
+						className="h-16 w-10 rounded-lg hover:bg-orange-100"
 					>
 						<ArrowLeftRight className="w-5 h-5 text-orange-600" />
 					</Button>
@@ -137,7 +138,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 				<div className="flex-1 min-w-[180px]">
 					<Label className="block mb-2 text-sm text-gray-600">Điểm đến</Label>
 					<Select value={arrivalLocation} onValueChange={setArrivalLocation}>
-						<SelectTrigger className="h-12">
+						<SelectTrigger className="w-full data-[size=default]:h-16 text-base">
 							<SelectValue placeholder="Chọn điểm đến" />
 						</SelectTrigger>
 						<SelectContent>
@@ -153,23 +154,27 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 				</div>
 
 				{/* Departure date */}
-				<div className="w-[160px] flex-shrink-0">
+				<div className="w-[200px] flex-shrink-0">
 					<Label className="block mb-2 text-sm text-gray-600">Ngày đi</Label>
 					<Popover>
 						<PopoverTrigger asChild>
 							<Button
 								variant="outline"
 								className={cn(
-									"w-full h-12 justify-start text-left font-normal",
+									"w-full h-16 flex-col items-start justify-center px-4 font-normal gap-0.5",
 									!departureDate && "text-muted-foreground",
 								)}
 							>
-								<CalendarIcon className="flex-shrink-0 w-4 h-4 mr-2" />
-								<span className="truncate">
+								<span className="text-base font-medium leading-tight">
 									{departureDate
 										? format(departureDate, "dd/MM/yyyy", { locale: vi })
 										: "Chọn ngày"}
 								</span>
+								{departureDate && (
+									<span className="text-xs text-gray-400 leading-tight capitalize">
+										{format(departureDate, "EEEE", { locale: vi })}
+									</span>
+								)}
 							</Button>
 						</PopoverTrigger>
 						<PopoverContent className="w-auto p-0" align="start">
@@ -186,23 +191,27 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 
 				{/* Return date (only for round-trip) */}
 				{tripType === "round-trip" && (
-					<div className="w-[160px] flex-shrink-0">
+					<div className="w-[200px] flex-shrink-0">
 						<Label className="block mb-2 text-sm text-gray-600">Ngày về</Label>
 						<Popover>
 							<PopoverTrigger asChild>
 								<Button
 									variant="outline"
 									className={cn(
-										"w-full h-12 justify-start text-left font-normal",
+										"w-full h-16 flex-col items-start justify-center px-4 font-normal gap-0.5",
 										!returnDate && "text-muted-foreground",
 									)}
 								>
-									<CalendarIcon className="flex-shrink-0 w-4 h-4 mr-2" />
-									<span className="truncate">
+									<span className="text-base font-medium leading-tight">
 										{returnDate
 											? format(returnDate, "dd/MM/yyyy", { locale: vi })
 											: "Chọn ngày"}
 									</span>
+									{returnDate && (
+										<span className="text-xs text-gray-400 leading-tight capitalize">
+											{format(returnDate, "EEEE", { locale: vi })}
+										</span>
+									)}
 								</Button>
 							</PopoverTrigger>
 							<PopoverContent className="w-auto p-0" align="start">
@@ -219,10 +228,10 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 				)}
 
 				{/* Ticket count */}
-				<div className="w-[100px] flex-shrink-0">
+				<div className="w-[110px] flex-shrink-0">
 					<Label className="block mb-2 text-sm text-gray-600">Số vé</Label>
 					<Select value={ticketCount} onValueChange={setTicketCount}>
-						<SelectTrigger className="h-12">
+						<SelectTrigger className="w-full data-[size=default]:h-16 text-base">
 							<SelectValue />
 						</SelectTrigger>
 						<SelectContent>
