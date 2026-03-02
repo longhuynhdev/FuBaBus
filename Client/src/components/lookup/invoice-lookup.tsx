@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { apiFetch } from "@/lib/api";
+import { toast } from "sonner";
 
 interface InvoiceData {
 	invoiceID: string;
@@ -46,32 +48,36 @@ export function InvoiceLookup() {
 
 	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault();
-		// TODO: Replace with actual API call using fetch
 		try {
-			// const response = await fetch(
-			//   `http://localhost:8080/api/invoices/phone/${formLookup.phoneNumber}/invoice-id/${formLookup.invoiceID}`
-			// );
-			// const data = await response.json();
-			// setInvoiceData(data);
-
-			// Mock data for now
-			setInvoiceData({
-				invoiceID: formLookup.invoiceID,
-				name: "Long Huynh",
-				phone: formLookup.phoneNumber,
-				email: "suikax86@gmail.com",
-				price: "250,000 VND",
-				paymentMethod: "Chuyển khoản",
-				status: "Đã thanh toán",
-				buses: "TP.HCM - Đà Lạt",
-				time: "08:00 - 15/01/2026",
-				seats: "A1, A2",
-				boardingPoint: "Bến xe Miền Đông",
-			});
-			setIsOpen(true);
+			const response = await apiFetch(
+				`/api/invoices/phone/${formLookup.phoneNumber}/invoice-id/${formLookup.invoiceID}`,
+			);
+			if (response.ok) {
+				const data = await response.json();
+				setInvoiceData({
+					invoiceID: data.id ?? data.invoiceID ?? formLookup.invoiceID,
+					name: data.name,
+					phone: data.phone,
+					email: data.email,
+					price: new Intl.NumberFormat("vi-VN").format(data.price) + " VND",
+					paymentMethod: data.paymentMethod,
+					status: data.status,
+					buses: Array.isArray(data.buses)
+						? data.buses.join(", ")
+						: (data.buses ?? ""),
+					time: data.time,
+					seats: Array.isArray(data.seats)
+						? data.seats.join(", ")
+						: (data.seats ?? ""),
+					boardingPoint: data.boardingPoint,
+				});
+				setIsOpen(true);
+			} else {
+				toast.error("Không tìm thấy hóa đơn. Vui lòng kiểm tra lại thông tin.");
+			}
 		} catch (error) {
 			console.error("Failed to fetch invoice data:", error);
-			alert("Có lỗi xảy ra khi tra cứu hóa đơn");
+			toast.error("Có lỗi xảy ra khi tra cứu hóa đơn.");
 		}
 	};
 

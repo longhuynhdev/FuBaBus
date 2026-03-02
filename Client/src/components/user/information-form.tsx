@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +9,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { apiFetch } from "@/lib/api";
+import { toast } from "sonner";
 
 interface UserData {
 	name: string;
@@ -20,7 +22,6 @@ interface UserData {
 }
 
 export function InformationForm() {
-	// TODO: Fetch user data from API
 	const [userData, setUserData] = useState<UserData>({
 		name: "",
 		phone: "",
@@ -29,6 +30,26 @@ export function InformationForm() {
 		address: "",
 		job: "",
 	});
+
+	useEffect(() => {
+		const customerId = localStorage.getItem("customerId");
+		if (!customerId) return;
+		apiFetch(`/api/customers/${customerId}`)
+			.then((res) => (res.ok ? res.json() : null))
+			.then((data) => {
+				if (data) {
+					setUserData({
+						name: data.name ?? "",
+						phone: data.phone ?? "",
+						email: data.email ?? "",
+						gender: data.gender ?? "MALE",
+						address: data.address ?? "",
+						job: data.job ?? "",
+					});
+				}
+			})
+			.catch((err) => console.error("Failed to load customer:", err));
+	}, []);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
@@ -47,22 +68,24 @@ export function InformationForm() {
 
 	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault();
-		// TODO: Replace with actual API call using fetch
+		const customerId = localStorage.getItem("customerId");
+		if (!customerId) {
+			toast.error("Vui lòng đăng nhập để cập nhật thông tin.");
+			return;
+		}
 		try {
-			// const customerId = localStorage.getItem('customerId');
-			// const response = await fetch(`http://localhost:8080/api/customers/${customerId}`, {
-			//   method: 'PUT',
-			//   headers: { 'Content-Type': 'application/json' },
-			//   body: JSON.stringify(userData),
-			// });
-			// if (response.ok) {
-			//   alert('Cập nhật thông tin thành công');
-			// }
-			console.log("Update user data:", userData);
-			alert("Cập nhật thông tin thành công");
+			const response = await apiFetch(`/api/customers/${customerId}`, {
+				method: "PUT",
+				body: JSON.stringify(userData),
+			});
+			if (response.ok) {
+				toast.success("Cập nhật thông tin thành công");
+			} else {
+				toast.error("Cập nhật thất bại. Vui lòng thử lại.");
+			}
 		} catch (error) {
 			console.error("Update error:", error);
-			alert("An error occurred while updating");
+			toast.error("Có lỗi xảy ra khi cập nhật.");
 		}
 	};
 

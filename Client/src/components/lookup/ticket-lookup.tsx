@@ -8,10 +8,15 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { apiFetch } from "@/lib/api";
+import { toast } from "sonner";
 
 interface TicketData {
 	busId: string;
 	customerId: string;
+	name: string;
+	email: string;
+	phone: string;
 	departureTime: string;
 	departureLocation: string;
 	arrivalTime: string;
@@ -46,31 +51,38 @@ export function TicketLookup() {
 
 	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault();
-		// TODO: Replace with actual API call using fetch
 		try {
-			// const response = await fetch(
-			//   `http://localhost:8080/api/tickets/${formLookup.ticketID}/phone/${formLookup.phoneNumber}`
-			// );
-			// const data = await response.json();
-			// setTicketData(data);
-
-			// Mock data for now
-			setTicketData({
-				busId: "BUS001",
-				customerId: "CUST001",
-				departureTime: "08:00",
-				departureLocation: "TP. Hồ Chí Minh",
-				arrivalTime: "14:00",
-				arrivalLocation: "Đà Lạt",
-				boardingPoint: "Bến xe Miền Đông",
-				droppingPoint: "Bến xe Đà Lạt",
-				busType: "Giường nằm 40 chỗ",
-				totalFare: "250,000 VND",
-				seats: "A1, A2",
-			});
-			setIsOpen(true);
+			const response = await apiFetch(
+				`/api/tickets/${formLookup.ticketID}/phone/${formLookup.phoneNumber}`,
+			);
+			if (response.ok) {
+				const data = await response.json();
+				setTicketData({
+					busId: data.busId,
+					customerId: data.customerId,
+					name: data.name,
+					email: data.email,
+					phone: data.phone,
+					departureTime: data.departureTime,
+					departureLocation: data.departureLocation,
+					arrivalTime: data.arrivalTime,
+					arrivalLocation: data.arrivalLocation,
+					boardingPoint: data.boardingPoint,
+					droppingPoint: data.droppingPoint,
+					busType: data.busType,
+					totalFare:
+						new Intl.NumberFormat("vi-VN").format(data.totalFare) + "đ",
+					seats: Array.isArray(data.seats)
+						? data.seats.join(", ")
+						: data.seats,
+				});
+				setIsOpen(true);
+			} else {
+				toast.error("Không tìm thấy vé. Vui lòng kiểm tra lại thông tin.");
+			}
 		} catch (error) {
 			console.error("Failed to fetch ticket data:", error);
+			toast.error("Có lỗi xảy ra khi tra cứu vé.");
 		}
 	};
 
@@ -121,7 +133,7 @@ export function TicketLookup() {
 
 					{ticketData && (
 						<div className="space-y-6">
-							{/* Basic Info */}
+							{/* Customer Info */}
 							<div className="p-4 rounded-lg space-y-4 bg-gray-50">
 								<h3 className="font-semibold text-gray-700">
 									Thông tin khách hàng
@@ -130,7 +142,7 @@ export function TicketLookup() {
 									<div>
 										<Label className="text-sm font-medium">Họ tên:</Label>
 										<Input
-											value="Long Huynh"
+											value={ticketData.name}
 											disabled
 											className="mt-1 bg-white"
 										/>
@@ -138,7 +150,7 @@ export function TicketLookup() {
 									<div>
 										<Label className="text-sm font-medium">Email:</Label>
 										<Input
-											value="suikax86@gmail.com"
+											value={ticketData.email}
 											disabled
 											className="mt-1 bg-white"
 										/>
@@ -148,7 +160,7 @@ export function TicketLookup() {
 											Số điện thoại:
 										</Label>
 										<Input
-											value={formLookup.phoneNumber}
+											value={ticketData.phone}
 											disabled
 											className="mt-1 bg-white"
 										/>
@@ -160,24 +172,6 @@ export function TicketLookup() {
 							<div className="p-4 rounded-lg space-y-4 bg-gray-50">
 								<h3 className="font-semibold text-gray-700">Chi tiết vé</h3>
 								<div className="grid grid-cols-2 gap-4">
-									<div>
-										<Label className="text-sm font-medium">Mã Bus:</Label>
-										<Input
-											value={ticketData.busId}
-											disabled
-											className="mt-1 bg-white"
-										/>
-									</div>
-									<div>
-										<Label className="text-sm font-medium">
-											Mã khách hàng:
-										</Label>
-										<Input
-											value={ticketData.customerId}
-											disabled
-											className="mt-1 bg-white"
-										/>
-									</div>
 									<div>
 										<Label className="text-sm font-medium">
 											Giờ khởi hành:

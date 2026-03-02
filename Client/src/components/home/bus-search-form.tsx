@@ -1,7 +1,8 @@
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { ArrowLeftRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { apiFetch } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
@@ -33,15 +34,6 @@ export interface SearchParams {
 	tripType: "one-way" | "round-trip";
 }
 
-const locations = [
-	"TP Hồ Chí Minh",
-	"Đà Lạt",
-	"Đà Nẵng",
-	"Khánh Hoà",
-	"Hà Nội",
-	"Nha Trang",
-];
-
 export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 	const [tripType, setTripType] = useState<"one-way" | "round-trip">("one-way");
 	const [departureLocation, setDepartureLocation] = useState("");
@@ -49,6 +41,22 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 	const [departureDate, setDepartureDate] = useState<Date>(new Date());
 	const [returnDate, setReturnDate] = useState<Date>(new Date());
 	const [ticketCount, setTicketCount] = useState("1");
+	const [locations, setLocations] = useState<string[]>([]);
+
+	useEffect(() => {
+		apiFetch("/api/buses")
+			.then((res) => (res.ok ? res.json() : []))
+			.then((buses: { departureLocation: string; arrivalLocation: string }[]) => {
+				const unique = [
+					...new Set([
+						...buses.map((b) => b.departureLocation),
+						...buses.map((b) => b.arrivalLocation),
+					]),
+				];
+				setLocations(unique);
+			})
+			.catch(() => {});
+	}, []);
 
 	const swapLocations = () => {
 		const temp = departureLocation;

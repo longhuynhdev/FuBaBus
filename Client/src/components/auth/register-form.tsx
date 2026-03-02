@@ -5,6 +5,8 @@ import logoWithTextIcon from "@/assets/logoText.svg";
 import TVCIcon from "@/assets/TVC.svg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { apiFetch } from "@/lib/api";
+import { toast } from "sonner";
 
 interface RegisterFormData {
 	phone: string;
@@ -32,23 +34,20 @@ export function RegisterForm() {
 
 	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault();
-		// TODO: Replace with actual API call using fetch
 		try {
-			// const response = await fetch('http://localhost:8080/api/auth/register', {
-			//   method: 'POST',
-			//   headers: { 'Content-Type': 'application/json' },
-			//   body: JSON.stringify(formData),
-			// });
-			// if (response.ok) {
-			//   alert('User registered successfully');
-			//   navigate({ to: '/login' });
-			// }
-			console.log("Register attempt with:", formData);
-			alert("User registered successfully");
-			navigate({ to: "/login" });
+			const response = await apiFetch("/api/auth/register", {
+				method: "POST",
+				body: JSON.stringify(formData),
+			});
+			if (response.ok) {
+				toast.success("Đăng ký thành công");
+				navigate({ to: "/login" });
+			} else {
+				toast.error("Đăng ký thất bại. Vui lòng thử lại.");
+			}
 		} catch (error) {
 			console.error("Register error:", error);
-			alert("An error occurred while registering");
+			toast.error("Có lỗi xảy ra khi đăng ký.");
 		}
 	};
 

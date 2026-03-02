@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronDown, History, KeyRound, LogOut, User } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -8,6 +8,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/auth-context";
+import { apiFetch } from "@/lib/api";
 
 const navLinkClass =
 	"mx-2 w-32 pb-3 px-2.5 text-center font-semibold text-base uppercase text-white hover:font-extrabold hover:text-gray-200";
@@ -15,7 +16,17 @@ const navLinkActiveClass = "font-extrabold border-b-4 border-white";
 
 export function Header() {
 	const { isLoggedIn, logout } = useAuth();
-	const [userName] = useState("User"); // Will be fetched via API later
+	const [userName, setUserName] = useState("User");
+
+	useEffect(() => {
+		if (!isLoggedIn) return;
+		const customerId = localStorage.getItem("customerId");
+		if (!customerId) return;
+		apiFetch(`/api/customers/${customerId}`)
+			.then((res) => (res.ok ? res.json() : null))
+			.then((data) => { if (data?.name) setUserName(data.name); })
+			.catch(() => {});
+	}, [isLoggedIn]);
 
 	const handleLogout = () => {
 		localStorage.removeItem("accessToken");
@@ -65,7 +76,7 @@ export function Header() {
 											className="flex items-center p-2 cursor-pointer gap-2"
 										>
 											<User className="w-4 h-4" />
-											<span>Thong tin tai khoan</span>
+											<span>Thông tin tài khoản</span>
 										</Link>
 									</DropdownMenuItem>
 									<DropdownMenuItem asChild>
@@ -74,7 +85,7 @@ export function Header() {
 											className="flex items-center p-2 cursor-pointer gap-2"
 										>
 											<History className="w-4 h-4" />
-											<span>Lich su mua ve</span>
+											<span>Lịch sử mua vé</span>
 										</Link>
 									</DropdownMenuItem>
 									<DropdownMenuItem asChild>
@@ -83,7 +94,7 @@ export function Header() {
 											className="flex items-center p-2 cursor-pointer gap-2"
 										>
 											<KeyRound className="w-4 h-4" />
-											<span>Dat lai mat khau</span>
+											<span>Đặt lại mật khẩu</span>
 										</Link>
 									</DropdownMenuItem>
 									<DropdownMenuItem
@@ -91,12 +102,12 @@ export function Header() {
 										className="flex items-center p-2 cursor-pointer gap-2"
 									>
 										<LogOut className="w-4 h-4" />
-										<span>Dang xuat</span>
+										<span>Đăng xuất</span>
 									</DropdownMenuItem>
 								</DropdownMenuContent>
 							</DropdownMenu>
 						) : (
-							<div className="flex items-center h-8 px-2 text-black bg-white w-52 gap-3 rounded-2xl">
+							<div className="flex items-center h-8 px-2 text-black bg-white w-auto gap-3 rounded-2xl whitespace-nowrap">
 								<User className="w-5 h-5" />
 								<Link to="/login" className="text-black hover:text-blue-500">
 									Đăng nhập

@@ -6,6 +6,8 @@ import TVCIcon from "@/assets/TVC.svg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/auth-context";
+import { apiFetch } from "@/lib/api";
+import { toast } from "sonner";
 
 interface LoginFormData {
 	phone: string;
@@ -30,27 +32,23 @@ export function LoginForm() {
 
 	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault();
-		// TODO: Replace with actual API call using fetch
-		// For now, just simulate login
 		try {
-			// const response = await fetch('http://localhost:8080/api/auth/login', {
-			//   method: 'POST',
-			//   headers: { 'Content-Type': 'application/json' },
-			//   body: JSON.stringify(formData),
-			// });
-			// const data = await response.json();
-			// if (response.ok) {
-			//   localStorage.setItem('accessToken', data.accessToken);
-			//   localStorage.setItem('customerId', data.customerId);
-			//   login();
-			//   navigate({ to: '/' });
-			// }
-			console.log("Login attempt with:", formData);
-			login();
-			navigate({ to: "/" });
+			const response = await apiFetch("/api/auth/login", {
+				method: "POST",
+				body: JSON.stringify(formData),
+			});
+			if (response.ok) {
+				const data = await response.json();
+				localStorage.setItem("accessToken", data.accessToken);
+				localStorage.setItem("customerId", data.customerId);
+				login();
+				navigate({ to: "/" });
+			} else {
+				toast.error("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+			}
 		} catch (error) {
 			console.error("Login error:", error);
-			alert("An error occurred while logging in");
+			toast.error("Có lỗi xảy ra khi đăng nhập.");
 		}
 	};
 

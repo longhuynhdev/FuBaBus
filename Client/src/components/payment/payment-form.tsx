@@ -4,11 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { apiFetch } from "@/lib/api";
+import { toast } from "sonner";
 
-interface PaymentFormProps {
-	totalPrice?: number;
-	boardingPoint?: string;
-	droppingPoint?: string;
+interface PendingBooking {
+	busId: string;
+	customerId: string;
+	totalPrice: number;
+	boardingPoint: string;
+	droppingPoint: string;
 }
 
 const paymentMethods = [
@@ -32,22 +36,25 @@ const paymentMethods = [
 	},
 ];
 
-export function PaymentForm({
-	totalPrice = 500000,
-	boardingPoint = "Bến xe Miền Đông",
-	droppingPoint = "Bến xe Đà Lạt",
-}: PaymentFormProps) {
+export function PaymentForm() {
 	const navigate = useNavigate();
 	const [paymentMethod, setPaymentMethod] = useState("zalopay");
-	const [timeLeft, setTimeLeft] = useState(20 * 60); // 20 minutes in seconds
+	const [timeLeft, setTimeLeft] = useState(20 * 60);
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
+	const [booking, setBooking] = useState<PendingBooking | null>(null);
+
+	useEffect(() => {
+		const stored = sessionStorage.getItem("pendingBooking");
+		if (stored) {
+			setBooking(JSON.parse(stored));
+		}
+	}, []);
 
 	useEffect(() => {
 		timerRef.current = setInterval(() => {
 			setTimeLeft((prev) => {
 				if (prev <= 1) {
 					if (timerRef.current) clearInterval(timerRef.current);
-					// Time's up - go back
 					navigate({ to: "/" });
 					return 0;
 				}
@@ -74,13 +81,31 @@ export function PaymentForm({
 		navigate({ to: "/" });
 	};
 
-	const handlePayment = () => {
-		// TODO: Call payment API
-		console.log("Processing payment with method:", paymentMethod);
-		alert(
-			`Đặt vé thành công!\nMã hóa đơn: INV${Date.now()}\nMã vé xe: TKT${Date.now()}`,
-		);
-		navigate({ to: "/" });
+	const handlePayment = async () => {
+		if (!booking) return;
+		try {
+			const qs = new URLSearchParams({
+				busId: booking.busId,
+				customerId: booking.customerId,
+			});
+			const response = await apiFetch(`/api/bookings/confirmation?${qs}`, {
+				method: "POST",
+			});
+			if (response.ok) {
+				const ids = await response.json();
+				sessionStorage.removeItem("pendingBooking");
+				toast.success("Đặt vé thành công!", {
+					description: `Mã hóa đơn: ${ids.invoiceId ?? ""} | Mã vé: ${ids.ticketId ?? ""}`,
+					duration: 5000,
+				});
+				navigate({ to: "/" });
+			} else {
+				toast.error("Thanh toán thất bại. Vui lòng thử lại.");
+			}
+		} catch (error) {
+			console.error("Payment error:", error);
+			toast.error("Có lỗi khi thanh toán.");
+		}
 	};
 
 	return (
@@ -98,7 +123,7 @@ export function PaymentForm({
 
 					<div className="text-center">
 						<p className="text-xl font-semibold">
-							{boardingPoint} → {droppingPoint}
+							{booking?.boardingPoint ?? ""} → {booking?.droppingPoint ?? ""}
 						</p>
 					</div>
 
@@ -160,7 +185,7 @@ export function PaymentForm({
 								<span className="text-gray-600">Tổng thanh toán</span>
 							</div>
 							<div className="mb-4 text-5xl font-bold text-orange-600">
-								{formatPrice(totalPrice)}
+								{formatPrice(booking?.totalPrice ?? 0)}
 							</div>
 							<div className="text-sm text-gray-500">
 								Thời gian giữ chỗ còn lại:{" "}

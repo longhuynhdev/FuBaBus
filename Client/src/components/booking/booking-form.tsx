@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,36 +11,30 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { apiFetch } from "@/lib/api";
+import { toast } from "sonner";
 import { SeatSelector } from "./seat-selector";
 
-// Mock data
-const mockBusData = {
-	id: "1",
-	departureLocation: "TP Hồ Chí Minh",
-	arrivalLocation: "Đà Lạt",
-	departureTime: new Date("2026-02-10T08:00:00"),
-	fare: 250000,
-	busType: "Giường nằm 40 chỗ",
-	boardingPoints: ["Bến xe Miền Đông", "Bến xe An Sương", "Ngã tư Thủ Đức"],
-	droppingPoints: ["Bến xe Đà Lạt", "Chợ Đà Lạt", "Hồ Xuân Hương"],
-	seats: [
-		{ seatNumber: "A1", isBooked: false },
-		{ seatNumber: "A2", isBooked: true },
-		{ seatNumber: "A3", isBooked: false },
-		{ seatNumber: "A4", isBooked: false },
-		{ seatNumber: "B1", isBooked: false },
-		{ seatNumber: "B2", isBooked: false },
-		{ seatNumber: "B3", isBooked: true },
-		{ seatNumber: "B4", isBooked: false },
-		{ seatNumber: "C1", isBooked: true },
-		{ seatNumber: "C2", isBooked: false },
-		{ seatNumber: "C3", isBooked: false },
-		{ seatNumber: "C4", isBooked: true },
-	],
-};
+interface BusData {
+	id: string;
+	departureLocation: string;
+	arrivalLocation: string;
+	departureTime: string;
+	fare: number;
+	busType: string;
+	boardingPoints: string[];
+	droppingPoints: string[];
+	seats: { seatNumber: string; isBooked: boolean }[];
+}
 
-export function BookingForm() {
+interface BookingFormProps {
+	busId: string;
+}
+
+export function BookingForm({ busId }: BookingFormProps) {
 	const navigate = useNavigate();
+	const [busData, setBusData] = useState<BusData | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
 	const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
 	const [customerName, setCustomerName] = useState("");
 	const [customerPhone, setCustomerPhone] = useState("");
@@ -48,7 +42,28 @@ export function BookingForm() {
 	const [boardingPoint, setBoardingPoint] = useState("");
 	const [droppingPoint, setDroppingPoint] = useState("");
 
-	const totalPrice = mockBusData.fare * selectedSeats.length;
+	useEffect(() => {
+		async function loadBus() {
+			try {
+				const response = await apiFetch(`/api/buses/${busId}`);
+				if (response.ok) {
+					setBusData(await response.json());
+				} else {
+					toast.error("Không tìm thấy thông tin xe.");
+					navigate({ to: "/" });
+				}
+			} catch (error) {
+				console.error("Failed to load bus:", error);
+				toast.error("Có lỗi khi tải thông tin xe.");
+				navigate({ to: "/" });
+			} finally {
+				setIsLoading(false);
+			}
+		}
+		loadBus();
+	}, [busId, navigate]);
+
+	const totalPrice = (busData?.fare ?? 0) * selectedSeats.length;
 
 	const formatPrice = (price: number) => {
 		return new Intl.NumberFormat("vi-VN").format(price) + "đ";
@@ -58,22 +73,51 @@ export function BookingForm() {
 		navigate({ to: "/" });
 	};
 
-	const handlePayment = () => {
-		// TODO: Call API to book
-		console.log("Booking:", {
-			busId: mockBusData.id,
-			seats: selectedSeats,
-			customerName,
-			customerPhone,
-			customerEmail,
-			boardingPoint,
-			droppingPoint,
-			totalPrice,
-		});
-		// Navigate to payment page
-		// navigate({ to: "/payment" });
-		alert("Chuyển đến trang thanh toán...");
+	const handlePayment = async () => {
+		if (!busData) return;
+		const customerId = localStorage.getItem("customerId") ?? "";
+		try {
+			const response = await apiFetch("/api/bookings", {
+				method: "POST",
+				body: JSON.stringify({
+					busId: busData.id,
+					customerId,
+					seats: selectedSeats,
+					totalFare: totalPrice,
+					boardingPoint,
+					droppingPoint,
+				}),
+			});
+			if (response.ok) {
+				sessionStorage.setItem(
+					"pendingBooking",
+					JSON.stringify({
+						busId: busData.id,
+						customerId,
+						totalPrice,
+						boardingPoint,
+						droppingPoint,
+					}),
+				);
+				navigate({ to: "/payment" });
+			} else {
+				toast.error("Đặt vé thất bại. Vui lòng thử lại.");
+			}
+		} catch (error) {
+			console.error("Booking error:", error);
+			toast.error("Có lỗi khi đặt vé.");
+		}
 	};
+
+	if (isLoading) {
+		return (
+			<div className="flex items-center justify-center py-24 text-gray-500">
+				Đang tải thông tin chuyến xe...
+			</div>
+		);
+	}
+
+	if (!busData) return null;
 
 	return (
 		<div className="flex gap-6">
@@ -82,7 +126,7 @@ export function BookingForm() {
 				{/* Seat selection */}
 				<div className="p-6 bg-white border border-gray-200 rounded-2xl">
 					<SeatSelector
-						seats={mockBusData.seats}
+						seats={busData.seats}
 						maxSeats={5}
 						onSelectionChange={setSelectedSeats}
 					/>
@@ -146,7 +190,7 @@ export function BookingForm() {
 									<SelectValue placeholder="Chọn điểm đón" />
 								</SelectTrigger>
 								<SelectContent>
-									{mockBusData.boardingPoints.map((point) => (
+									{busData.boardingPoints.map((point) => (
 										<SelectItem key={point} value={point}>
 											{point}
 										</SelectItem>
@@ -163,7 +207,7 @@ export function BookingForm() {
 									<SelectValue placeholder="Chọn điểm trả" />
 								</SelectTrigger>
 								<SelectContent>
-									{mockBusData.droppingPoints.map((point) => (
+									{busData.droppingPoints.map((point) => (
 										<SelectItem key={point} value={point}>
 											{point}
 										</SelectItem>
@@ -207,18 +251,16 @@ export function BookingForm() {
 					<div className="text-sm space-y-3">
 						<div className="flex justify-between">
 							<span className="text-gray-600">Tuyến xe đi</span>
-							<span className="font-medium">
-								{mockBusData.departureLocation}
-							</span>
+							<span className="font-medium">{busData.departureLocation}</span>
 						</div>
 						<div className="flex justify-between">
 							<span className="text-gray-600">Tuyến xe tới</span>
-							<span className="font-medium">{mockBusData.arrivalLocation}</span>
+							<span className="font-medium">{busData.arrivalLocation}</span>
 						</div>
 						<div className="flex justify-between">
 							<span className="text-gray-600">Thời gian xuất bến</span>
 							<span className="font-medium">
-								{format(mockBusData.departureTime, "HH:mm dd/MM/yyyy")}
+								{format(new Date(busData.departureTime), "HH:mm dd/MM/yyyy")}
 							</span>
 						</div>
 						<div className="flex justify-between">

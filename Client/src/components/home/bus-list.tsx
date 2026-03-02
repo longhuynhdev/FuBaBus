@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-interface BusData {
+export interface BusData {
 	id: string;
 	departureTime: string;
 	arrivalTime: string;
@@ -15,51 +15,12 @@ interface BusData {
 	availableSeats: number;
 }
 
-// Mock data for display
-const mockBuses: BusData[] = [
-	{
-		id: "1",
-		departureTime: "06:00",
-		arrivalTime: "12:00",
-		departureLocation: "Bến xe Miền Đông",
-		arrivalLocation: "Bến xe Đà Lạt",
-		busType: "Giường nằm 40 chỗ",
-		fare: 250000,
-		availableSeats: 20,
-	},
-	{
-		id: "2",
-		departureTime: "08:30",
-		arrivalTime: "14:30",
-		departureLocation: "Bến xe Miền Đông",
-		arrivalLocation: "Bến xe Đà Lạt",
-		busType: "Limousine 24 chỗ",
-		fare: 350000,
-		availableSeats: 12,
-	},
-	{
-		id: "3",
-		departureTime: "14:00",
-		arrivalTime: "20:00",
-		departureLocation: "Bến xe Miền Đông",
-		arrivalLocation: "Bến xe Đà Lạt",
-		busType: "Ghế ngồi 45 chỗ",
-		fare: 180000,
-		availableSeats: 30,
-	},
-	{
-		id: "4",
-		departureTime: "22:00",
-		arrivalTime: "04:00",
-		departureLocation: "Bến xe Miền Đông",
-		arrivalLocation: "Bến xe Đà Lạt",
-		busType: "Giường nằm 40 chỗ",
-		fare: 280000,
-		availableSeats: 15,
-	},
-];
+interface BusListProps {
+	buses: BusData[];
+	isLoading: boolean;
+}
 
-export function BusList() {
+export function BusList({ buses, isLoading }: BusListProps) {
 	const navigate = useNavigate();
 	const [timeFilter, setTimeFilter] = useState("");
 	const [busTypeFilter, setBusTypeFilter] = useState("");
@@ -233,64 +194,72 @@ export function BusList() {
 
 				{/* Bus cards */}
 				<div className="space-y-4">
-					{mockBuses.map((bus) => (
-						<div
-							key={bus.id}
-							onClick={() => handleSelectBus(bus.id)}
-							className="p-6 bg-white border border-gray-200 cursor-pointer rounded-2xl hover:border-orange-300 hover:shadow-md transition-all"
-						>
-							<div className="flex items-center justify-between">
-								{/* Departure info */}
-								<div className="text-center">
-									<div className="text-2xl font-bold text-gray-900">
-										{bus.departureTime}
+					{isLoading ? (
+						<p className="py-8 text-center text-gray-500">Đang tìm kiếm...</p>
+					) : buses.length === 0 ? (
+						<p className="py-8 text-center text-gray-500">
+							Không tìm thấy chuyến xe phù hợp.
+						</p>
+					) : (
+						buses.map((bus) => (
+							<div
+								key={bus.id}
+								onClick={() => handleSelectBus(bus.id)}
+								className="p-6 bg-white border border-gray-200 cursor-pointer rounded-2xl hover:border-orange-300 hover:shadow-md transition-all"
+							>
+								<div className="flex items-center justify-between">
+									{/* Departure info */}
+									<div className="text-center">
+										<div className="text-2xl font-bold text-gray-900">
+											{bus.departureTime}
+										</div>
+										<div className="mt-1 text-sm text-gray-500">
+											{bus.departureLocation}
+										</div>
 									</div>
-									<div className="mt-1 text-sm text-gray-500">
-										{bus.departureLocation}
-									</div>
-								</div>
 
-								{/* Journey visualization */}
-								<div className="flex items-center justify-center flex-1 mx-8">
-									<div className="flex items-center text-gray-400 gap-2">
-										<div className="w-3 h-3 bg-orange-500 rounded-full" />
-										<div className="flex-1 border-t-2 border-dashed border-gray-300 min-w-[100px]" />
-										<div className="text-xs text-gray-500">6 giờ</div>
-										<div className="flex-1 border-t-2 border-dashed border-gray-300 min-w-[100px]" />
-										<div className="w-3 h-3 bg-green-500 rounded-full" />
+									{/* Journey visualization */}
+									<div className="flex items-center justify-center flex-1 mx-8">
+										<div className="flex items-center text-gray-400 gap-2">
+											<div className="w-3 h-3 bg-orange-500 rounded-full" />
+											<div className="flex-1 border-t-2 border-dashed border-gray-300 min-w-[100px]" />
+											<div className="text-xs text-gray-500">6 giờ</div>
+											<div className="flex-1 border-t-2 border-dashed border-gray-300 min-w-[100px]" />
+											<div className="w-3 h-3 bg-green-500 rounded-full" />
+										</div>
 									</div>
-								</div>
 
-								{/* Arrival info */}
-								<div className="text-center">
-									<div className="text-2xl font-bold text-gray-900">
-										{bus.arrivalTime}
+									{/* Arrival info */}
+									<div className="text-center">
+										<div className="text-2xl font-bold text-gray-900">
+											{bus.arrivalTime}
+										</div>
+										<div className="mt-1 text-sm text-gray-500">
+											{bus.arrivalLocation}
+										</div>
 									</div>
-									<div className="mt-1 text-sm text-gray-500">
-										{bus.arrivalLocation}
-									</div>
-								</div>
 
-								{/* Bus type */}
-								<div className="mx-8 text-center">
-									<div className="flex items-center text-gray-600 gap-2">
-										<Bus className="w-5 h-5" />
-										<span className="text-sm">{bus.busType}</span>
+									{/* Bus type */}
+									<div className="mx-8 text-center">
+										<div className="flex items-center text-gray-600 gap-2">
+											<Bus className="w-5 h-5" />
+											<span className="text-sm">{bus.busType}</span>
+										</div>
 									</div>
-								</div>
 
-								{/* Price and availability */}
-								<div className="text-right">
-									<div className="text-sm text-gray-500">
-										Còn {bus.availableSeats} chỗ
-									</div>
-									<div className="mt-1 text-xl font-bold text-orange-600">
-										{formatPrice(bus.fare)}
+									{/* Price and availability */}
+									<div className="text-right">
+										<div className="text-sm text-gray-500">
+											Còn {bus.availableSeats} chỗ
+										</div>
+										<div className="mt-1 text-xl font-bold text-orange-600">
+											{formatPrice(bus.fare)}
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					))}
+						))
+					)}
 				</div>
 			</div>
 		</div>

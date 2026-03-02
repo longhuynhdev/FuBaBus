@@ -3,7 +3,7 @@
 GET http://localhost:8080/api/buses
 ###
 ## Get a specific bus by ID
-@busid=69a5456fc527dc545010b6cc
+@busid=69a55380c527dc545010b6ce
 GET http://localhost:8080/api/buses/{{busid}}
 ###
 ## Create a new bus
@@ -15,9 +15,9 @@ Content-Type: application/json
 
 {
     "departureTime": "{{currentDate}}:23:00",
-    "departureLocation": "Ho Chi Minh City",
+    "departureLocation": "TP. Hồ Chí Minh",
     "arrivalTime": "{{tomorrowDate}}:08:00",
-    "arrivalLocation": "Khanh Hoa",
+    "arrivalLocation": "Khánh Hòa",
     "fare": 295000,
     "boardingPoints": [
         "Bến xe An Sương",
