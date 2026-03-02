@@ -30,7 +30,7 @@ public class BusController {
         this.busRepository = busRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public List<Bus> getBuses() {
         return this.busRepository.findAll();
     }
@@ -93,7 +93,7 @@ public class BusController {
         return buses;
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<?> newBus(@RequestBody BusDto newBusDto, BindingResult result) {
 
         if (result.hasErrors()) {
@@ -110,7 +110,7 @@ public class BusController {
         return ResponseEntity.ok(this.busRepository.save(bus));
     }
 
-    @PostMapping("/addBuses")
+    @PostMapping("/bulk")
     public ResponseEntity<?> newBuses(@RequestBody List<BusDto> newBusDtos, BindingResult result) {
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().body("Validation errors: " + result.getAllErrors());

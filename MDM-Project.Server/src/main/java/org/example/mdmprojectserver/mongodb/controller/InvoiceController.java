@@ -37,9 +37,9 @@ public class InvoiceController {
         }
     }
 
-    @GetMapping("/phone/{phone}/invoiceID/{invoiceID}")
-    public ResponseEntity<?> getInvoiceByPhoneAndInvoiceID(@PathVariable String phone, @PathVariable String invoiceID) {
-        Optional<Invoice> invoice = invoiceRepository.findByPhoneAndInvoiceID(phone, invoiceID);
+    @GetMapping("/phone/{phone}/invoice-id/{invoice-id}")
+    public ResponseEntity<?> getInvoiceByPhoneAndInvoiceID(@PathVariable String phone, @PathVariable("invoice-id") String invoiceId) {
+        Optional<Invoice> invoice = invoiceRepository.findByPhoneAndInvoiceID(phone, invoiceId);
         if (invoice.isPresent()) {
             return ResponseEntity.ok(invoice.get());
         } else {

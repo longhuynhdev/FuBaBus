@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/booking")
+@RequestMapping("/api/bookings")
 public class BookingController {
     private final BookingService bookingService;
 
@@ -18,7 +18,7 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @PostMapping("/book")
+    @PostMapping
     public ResponseEntity<String> bookTicket(@RequestBody TicketDto ticketDto) {
         try {
             Ticket ticket = new Ticket(ticketDto.getBusId(), ticketDto.getCustomerId(), ticketDto.getSeats(), ticketDto.getTotalFare(), ticketDto.getBoardingPoint(), ticketDto.getDroppingPoint());
@@ -29,7 +29,7 @@ public class BookingController {
         }
     }
 
-    @PostMapping("/confirm")
+    @PostMapping("/confirmation")
     public ResponseEntity<Map<String, String>> confirmBooking(@RequestParam String busId, @RequestParam String customerId) {
         try {
             Map<String, String> ids = bookingService.confirmBooking(busId, customerId);

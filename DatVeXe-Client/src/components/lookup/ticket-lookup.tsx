@@ -49,7 +49,7 @@ export function TicketLookup() {
 		// TODO: Replace with actual API call using fetch
 		try {
 			// const response = await fetch(
-			//   `http://localhost:8080/api/tickets/${formLookup.ticketID}/${formLookup.phoneNumber}`
+			//   `http://localhost:8080/api/tickets/${formLookup.ticketID}/phone/${formLookup.phoneNumber}`
 			// );
 			// const data = await response.json();
 			// setTicketData(data);

@@ -30,7 +30,7 @@ public class TicketController {
         this.customerRepository = customerRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public List<Ticket> getTickets() {
         return ticketRepositoryRepository.findAll();
     }
@@ -74,8 +74,8 @@ public class TicketController {
         }
     }
 
-    @GetMapping("/{id}/{phoneNumber}")
-    public ResponseEntity<?> getTicketByIdAndPhoneNumber(@PathVariable String id, @PathVariable String phoneNumber) {
+    @GetMapping("/{id}/phone/{phone-number}")
+    public ResponseEntity<?> getTicketByIdAndPhoneNumber(@PathVariable String id, @PathVariable("phone-number") String phoneNumber) {
         Optional<Ticket> optionalTicket = ticketRepositoryRepository.findById(id);
         if (optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();

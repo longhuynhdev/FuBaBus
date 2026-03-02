@@ -49,7 +49,7 @@ export function InvoiceLookup() {
 		// TODO: Replace with actual API call using fetch
 		try {
 			// const response = await fetch(
-			//   `http://localhost:8080/api/invoices/phone/${formLookup.phoneNumber}/invoiceID/${formLookup.invoiceID}`
+			//   `http://localhost:8080/api/invoices/phone/${formLookup.phoneNumber}/invoice-id/${formLookup.invoiceID}`
 			// );
 			// const data = await response.json();
 			// setInvoiceData(data);
