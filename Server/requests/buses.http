@@ -1,0 +1,38 @@
+# Buses API Endpoint
+## Get all buses
+GET http://localhost:8080/api/buses
+###
+## Get a specific bus by ID
+@busid=69a55380c527dc545010b6ce
+GET http://localhost:8080/api/buses/{{busid}}
+###
+## Create a new bus
+@currentDate = {{$datetime "YYYY-MM-DD"}}
+@tomorrowDate = {{$datetime "YYYY-MM-DD" 1 d}}
+
+POST http://localhost:8080/api/buses
+Content-Type: application/json
+
+{
+    "departureTime": "{{currentDate}}:23:00",
+    "departureLocation": "TP. Hồ Chí Minh",
+    "arrivalTime": "{{tomorrowDate}}:08:00",
+    "arrivalLocation": "Khánh Hòa",
+    "fare": 295000,
+    "boardingPoints": [
+        "Bến xe An Sương",
+        "BX Miền Đông Mới",
+        "223 Phạm Hữu Lầu",
+        "Hàng xanh",
+        "43 Nguyễn Cư Trinh",
+        "205 Phạm Ngũ Lão",
+        "Suối Linh",
+        "BX Miền Đông",
+        "Xa lộ Hà Nội"
+        ],
+    "droppingPoints": [
+        "Bến Lội",
+        "Bến xe Phía Nam"
+        ],
+    "busType": "GHẾ"
+}

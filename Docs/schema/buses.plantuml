@@ -1,0 +1,25 @@
+@startjson
+{
+    "_id": "ObjectId('67...da0')",
+    "departureTime": "ISODate('2025-03-24T13:00:00.000Z')",
+    "departureLocation": "Hồ Chí Minh",
+    "timeType": ["EARLY_MORNING","MORNING","AFTERNOON","NIGHT"],
+    "arrivalTime": "ISODate('2025-03-24T21:00:00.000Z')",
+    "arrivalLocation": "Khánh Hòa",
+    "fare": 350000,
+    "boardingPoints": ["Bến xe An Sương","Bến xe Miền Tây","Hàng Xanh", "Xa Lộ Đại Hàn","Bến xe Miền Đông", "Bến Lội", "Ngã Tư Ga"],
+    "droppingPoints": ["Bến Xe Cam Ranh"],
+    "busType": ["GHẾ","GIƯỜNG","LIMOUSINE"],
+    "status": ["STILL_AVAILABLE","FULLY_BOOKED","COMPLETED"],
+    "seats": [
+        {
+            "seatNumber": "A1",
+            "isBooked": false
+        },
+        {
+            "seatNumber": "A2",
+            "isBooked": true
+        }
+    ]
+}
+@endjson
