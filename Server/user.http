@@ -1,0 +1,19 @@
+## Register
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Huỳnh Thế Long",
+  "phone": "+84123456789",
+  "password": "Pass123@",
+  "email": "longhuynh@fubabus.com"
+}
+###
+## Login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "phone": "0123456789",
+  "password": "Pass123@"
+}   
