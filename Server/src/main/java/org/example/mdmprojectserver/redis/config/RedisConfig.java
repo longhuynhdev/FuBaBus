@@ -1,5 +1,6 @@
 package org.example.mdmprojectserver.redis.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +14,14 @@ import java.time.Duration;
 @Configuration
 public class RedisConfig extends CachingConfigurerSupport {
 
-    private String host ="localhost";
+    @Value("${spring.data.redis.host:localhost}")
+    private String host;
 
-    private String port="6379";
+    @Value("${spring.data.redis.port:6379}")
+    private String port;
+
+    @Value("${spring.data.redis.password:}")
+    private String password;
 
     private String timeout = "2000";
 
@@ -24,6 +30,9 @@ public class RedisConfig extends CachingConfigurerSupport {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(host);
         redisStandaloneConfiguration.setPort(Integer.valueOf(port));
+        if (password != null && !password.isBlank()) {
+            redisStandaloneConfiguration.setPassword(password);
+        }
 
         JedisClientConfiguration.JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
         jedisClientConfiguration.connectTimeout(Duration.ofSeconds(Integer.valueOf(timeout)));// connection timeout
