@@ -1,26 +1,40 @@
-version: '3'
+name: fubabus
+
 services:
+  # ─── Spring Boot Application ─────────────────────────────────────────────────
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    image: sukaix86/mdm-project-server
+    image: fubabus-server
     ports:
       - "8080:8080"
-  postgres:
-    image: postgres:latest
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=FutabusClone
+      - SPRING_PROFILES_ACTIVE=prod
+      - MONGODB_URI=${MONGODB_URI}
+      - MONGODB_DATABASE=${MONGODB_DATABASE}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ─── Redis (Seat Reservation Cache) ──────────────────────────────────────────
   redis:
-    image: redis:latest
-    command: ["redis-server", "--appendonly", "yes"]
-  mongo:
-    image: mongo:latest
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=mongo
-      - MONGO_INITDB_ROOT_PASSWORD=mongo
-      - MONGO_INITDB_DATABASE=FutabusClone
+    image: redis:7-alpine
+    # Enable password auth, AOF persistence, and keyspace expiry notifications (required for KeyExpirationListener)
+    command: redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes --notify-keyspace-events Ex
     volumes:
-      - ./init/mongo:/docker-entrypoint-initdb.d
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    # Do NOT expose port 6379 to the host — only the app container needs it
+    expose:
+      - "6379"
+
+volumes:
+  redis_data:

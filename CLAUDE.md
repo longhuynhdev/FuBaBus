@@ -5,8 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 A bus ticket booking system (Futabus clone) with two separate sub-projects:
-- **`DatVeXe-Client/`** — React + TypeScript frontend
-- **`MDM-Project.Server/`** — Spring Boot backend
+- **`Client/`** — React + TypeScript frontend
+- **`Server/`** — Spring Boot backend
 
 ## Client Commands
 
@@ -42,7 +42,7 @@ docker run -d -p 6379:6379 --name redis redis:latest
 
 ### Routing — TanStack Router (file-based)
 
-Routes live in `DatVeXe-Client/src/routes/`. The router plugin auto-generates `routeTree.gen.ts` from these files — **never edit `routeTree.gen.ts` manually**. Route files use `createFileRoute("/path")`.
+Routes live in `Client/src/routes/`. The router plugin auto-generates `routeTree.gen.ts` from these files — **never edit `routeTree.gen.ts` manually**. Route files use `createFileRoute("/path")`.
 
 Dynamic routes use `$` prefix: `booking.$id.tsx` → `/booking/:id`.
 
