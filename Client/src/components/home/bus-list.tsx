@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { Banknote, Bus, Clock } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
@@ -11,6 +11,7 @@ export interface BusData {
 	departureLocation: string;
 	arrivalLocation: string;
 	busType: string;
+	timeType: string;
 	fare: number;
 	availableSeats: number;
 }
@@ -25,6 +26,27 @@ export function BusList({ buses, isLoading }: BusListProps) {
 	const [timeFilter, setTimeFilter] = useState("");
 	const [busTypeFilter, setBusTypeFilter] = useState("");
 	const [sortBy, setSortBy] = useState("");
+
+	const computedBuses = useMemo(() => {
+		let result = [...buses];
+
+		if (timeFilter) {
+			result = result.filter((b) => b.timeType === timeFilter);
+		}
+
+		if (busTypeFilter) {
+			result = result.filter((b) => b.busType === busTypeFilter);
+		}
+
+		if (sortBy === "price-asc") result.sort((a, b) => a.fare - b.fare);
+		if (sortBy === "price-desc") result.sort((a, b) => b.fare - a.fare);
+		if (sortBy === "time-asc")
+			result.sort((a, b) => a.departureTime.localeCompare(b.departureTime));
+		if (sortBy === "time-desc")
+			result.sort((a, b) => b.departureTime.localeCompare(a.departureTime));
+
+		return result;
+	}, [buses, timeFilter, busTypeFilter, sortBy]);
 
 	const handleSelectBus = (busId: string) => {
 		navigate({ to: "/booking/$id", params: { id: busId } });
@@ -47,7 +69,7 @@ export function BusList({ buses, isLoading }: BusListProps) {
 						<RadioGroup value={timeFilter} onValueChange={setTimeFilter}>
 							<div className="space-y-2">
 								<div className="flex items-center space-x-2">
-									<RadioGroupItem value="early-morning" id="early-morning" />
+									<RadioGroupItem value="EARLY_MORNING" id="early-morning" />
 									<Label
 										htmlFor="early-morning"
 										className="text-sm cursor-pointer"
@@ -56,19 +78,19 @@ export function BusList({ buses, isLoading }: BusListProps) {
 									</Label>
 								</div>
 								<div className="flex items-center space-x-2">
-									<RadioGroupItem value="morning" id="morning" />
+									<RadioGroupItem value="MORNING" id="morning" />
 									<Label htmlFor="morning" className="text-sm cursor-pointer">
 										Buổi sáng 06:00 - 12:00
 									</Label>
 								</div>
 								<div className="flex items-center space-x-2">
-									<RadioGroupItem value="afternoon" id="afternoon" />
+									<RadioGroupItem value="AFTERNOON" id="afternoon" />
 									<Label htmlFor="afternoon" className="text-sm cursor-pointer">
 										Buổi chiều 12:00 - 18:00
 									</Label>
 								</div>
 								<div className="flex items-center space-x-2">
-									<RadioGroupItem value="night" id="night" />
+									<RadioGroupItem value="NIGHT" id="night" />
 									<Label htmlFor="night" className="text-sm cursor-pointer">
 										Buổi tối 18:00 - 24:00
 									</Label>
@@ -85,19 +107,19 @@ export function BusList({ buses, isLoading }: BusListProps) {
 						<RadioGroup value={busTypeFilter} onValueChange={setBusTypeFilter}>
 							<div className="flex flex-wrap gap-4">
 								<div className="flex items-center space-x-2">
-									<RadioGroupItem value="seat" id="seat" />
+									<RadioGroupItem value="GHẾ" id="seat" />
 									<Label htmlFor="seat" className="text-sm cursor-pointer">
 										Ghế
 									</Label>
 								</div>
 								<div className="flex items-center space-x-2">
-									<RadioGroupItem value="sleeper" id="sleeper" />
+									<RadioGroupItem value="GIƯỜNG" id="sleeper" />
 									<Label htmlFor="sleeper" className="text-sm cursor-pointer">
 										Giường
 									</Label>
 								</div>
 								<div className="flex items-center space-x-2">
-									<RadioGroupItem value="limousine" id="limousine" />
+									<RadioGroupItem value="LIMOUSINE" id="limousine" />
 									<Label htmlFor="limousine" className="text-sm cursor-pointer">
 										Limousine
 									</Label>
@@ -196,12 +218,12 @@ export function BusList({ buses, isLoading }: BusListProps) {
 				<div className="space-y-4">
 					{isLoading ? (
 						<p className="py-8 text-center text-gray-500">Đang tìm kiếm...</p>
-					) : buses.length === 0 ? (
+					) : computedBuses.length === 0 ? (
 						<p className="py-8 text-center text-gray-500">
 							Không tìm thấy chuyến xe phù hợp.
 						</p>
 					) : (
-						buses.map((bus) => (
+						computedBuses.map((bus) => (
 							<div
 								key={bus.id}
 								onClick={() => handleSelectBus(bus.id)}
