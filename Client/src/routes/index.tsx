@@ -22,6 +22,7 @@ interface ApiBus {
 	departureLocation: string;
 	arrivalLocation: string;
 	busType: string;
+	timeType: string;
 	fare: number;
 	seats: { seatNumber: string; isBooked: boolean }[];
 }
@@ -39,6 +40,7 @@ function mapBus(bus: ApiBus): BusData {
 		departureLocation: bus.departureLocation,
 		arrivalLocation: bus.arrivalLocation,
 		busType: bus.busType,
+		timeType: bus.timeType,
 		fare: bus.fare,
 		availableSeats: bus.seats.filter((s) => !s.isBooked).length,
 	};
