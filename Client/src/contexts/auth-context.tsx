@@ -5,11 +5,13 @@ import {
 	useEffect,
 	useState,
 } from "react";
+import { apiFetch } from "@/lib/api";
 
 interface AuthContextType {
 	isLoggedIn: boolean;
 	role: string | null;
 	isEmployee: boolean;
+	userName: string;
 	login: (role: string) => void;
 	logout: () => void;
 }
@@ -30,6 +32,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 		return localStorage.getItem("role");
 	});
 
+	const [userName, setUserName] = useState(() => {
+		return localStorage.getItem("userName") || "User";
+	});
+
 	const isEmployee = role === "EMPLOYEE" || role === "ADMIN";
 
 	const login = (userRole: string) => {
@@ -41,16 +47,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
 	const logout = () => {
 		setIsLoggedIn(false);
 		setRole(null);
+		setUserName("User");
 		localStorage.removeItem("role");
+		localStorage.removeItem("userName");
 	};
 
 	useEffect(() => {
 		localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
 	}, [isLoggedIn]);
 
+	useEffect(() => {
+		if (!isLoggedIn) return;
+		const customerId = localStorage.getItem("customerId");
+		if (!customerId) return;
+		apiFetch(`/api/customers/${customerId}`)
+			.then((res) => (res.ok ? res.json() : null))
+			.then((data) => {
+				if (data?.name) {
+					setUserName(data.name);
+					localStorage.setItem("userName", data.name);
+				}
+			})
+			.catch(() => {});
+	}, [isLoggedIn]);
+
 	return (
 		<AuthContext.Provider
-			value={{ isLoggedIn, role, isEmployee, login, logout }}
+			value={{ isLoggedIn, role, isEmployee, userName, login, logout }}
 		>
 			{children}
 		</AuthContext.Provider>

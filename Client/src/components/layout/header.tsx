@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronDown, History, KeyRound, LayoutDashboard, LogOut, Menu, User, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -8,7 +8,6 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/auth-context";
-import { apiFetch } from "@/lib/api";
 
 const navLinkClass =
 	"px-2 sm:mx-2 sm:w-32 pb-1 sm:pb-3 sm:px-2.5 text-center font-semibold text-xs sm:text-base uppercase text-white hover:font-extrabold hover:text-gray-200";
@@ -22,19 +21,8 @@ const navLinks = [
 ];
 
 export function Header() {
-	const { isLoggedIn, isEmployee, logout } = useAuth();
-	const [userName, setUserName] = useState("User");
+	const { isLoggedIn, isEmployee, userName, logout } = useAuth();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-	useEffect(() => {
-		if (!isLoggedIn) return;
-		const customerId = localStorage.getItem("customerId");
-		if (!customerId) return;
-		apiFetch(`/api/customers/${customerId}`)
-			.then((res) => (res.ok ? res.json() : null))
-			.then((data) => { if (data?.name) setUserName(data.name); })
-			.catch(() => {});
-	}, [isLoggedIn]);
 
 	const handleLogout = () => {
 		localStorage.removeItem("accessToken");
