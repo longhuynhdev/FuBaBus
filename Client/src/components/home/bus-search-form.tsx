@@ -76,7 +76,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 	};
 
 	return (
-		<div className="p-6 bg-white border border-gray-200 shadow-lg rounded-2xl">
+		<div className="p-4 sm:p-6 bg-white border border-gray-200 shadow-lg rounded-2xl">
 			{/* Trip type selection */}
 			<div className="flex items-center justify-between mb-6">
 				<RadioGroup
@@ -104,10 +104,10 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 				</span>
 			</div>
 
-			{/* Search inputs */}
-			<div className="flex items-end gap-3">
+			{/* Search inputs — stacks vertically on mobile, row on lg+ */}
+			<div className="flex flex-wrap items-end gap-3">
 				{/* Departure location */}
-				<div className="flex-1 min-w-[180px]">
+				<div className="w-full sm:flex-1 sm:min-w-[180px]">
 					<Label className="block mb-2 text-sm text-gray-600">Điểm đi</Label>
 					<Select
 						value={departureLocation}
@@ -129,21 +129,21 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 				</div>
 
 				{/* Swap button */}
-				<div className="flex-shrink-0">
-					<span className="invisible block mb-2 text-sm">‎</span>
+				<div className="flex-shrink-0 flex flex-col items-center w-full sm:w-auto">
+					<span className="invisible hidden sm:block mb-2 text-sm">‎</span>
 					<Button
 						type="button"
 						variant="ghost"
 						size="icon"
 						onClick={swapLocations}
-						className="h-16 w-10 rounded-lg hover:bg-orange-100"
+						className="h-10 w-10 sm:h-16 rounded-lg hover:bg-orange-100"
 					>
-						<ArrowLeftRight className="w-5 h-5 text-orange-600" />
+						<ArrowLeftRight className="w-5 h-5 text-orange-600 rotate-90 sm:rotate-0" />
 					</Button>
 				</div>
 
 				{/* Arrival location */}
-				<div className="flex-1 min-w-[180px]">
+				<div className="w-full sm:flex-1 sm:min-w-[180px]">
 					<Label className="block mb-2 text-sm text-gray-600">Điểm đến</Label>
 					<Select value={arrivalLocation} onValueChange={setArrivalLocation}>
 						<SelectTrigger className="w-full data-[size=default]:h-16 text-base">
@@ -162,7 +162,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 				</div>
 
 				{/* Departure date */}
-				<div className="w-[200px] flex-shrink-0">
+				<div className="w-full sm:w-[200px] sm:flex-shrink-0">
 					<Label className="block mb-2 text-sm text-gray-600">Ngày đi</Label>
 					<Popover>
 						<PopoverTrigger asChild>
@@ -199,7 +199,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 
 				{/* Return date (only for round-trip) */}
 				{tripType === "round-trip" && (
-					<div className="w-[200px] flex-shrink-0">
+					<div className="w-full sm:w-[200px] sm:flex-shrink-0">
 						<Label className="block mb-2 text-sm text-gray-600">Ngày về</Label>
 						<Popover>
 							<PopoverTrigger asChild>
@@ -236,7 +236,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 				)}
 
 				{/* Ticket count */}
-				<div className="w-[110px] flex-shrink-0">
+				<div className="w-full sm:w-[110px] sm:flex-shrink-0">
 					<Label className="block mb-2 text-sm text-gray-600">Số vé</Label>
 					<Select value={ticketCount} onValueChange={setTicketCount}>
 						<SelectTrigger className="w-full data-[size=default]:h-16 text-base">

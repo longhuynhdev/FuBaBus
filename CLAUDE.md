@@ -92,3 +92,17 @@ The server is split into two sub-packages by database concern:
 ## Code Style
 
 The client uses **Biome** as the primary formatter/linter (tabs for indentation, double quotes for JS/TS strings). ESLint is also present but Biome is preferred. `noExplicitAny` is enforced — avoid `any` types.
+
+## Commit Suggestions
+
+After completing a task that represents a logical stopping point, suggest a concise commit message of one to two lines following the Conventional Commits format (e.g., `feat: add seat selection UI`, `fix: correct booking TTL expiry`). Do not commit automatically — just provide the message for the user to use.
+
+## UI & Responsiveness
+
+After any UI change, verify the component looks correct at mobile (≤ 640px), tablet (641–1024px), and desktop (> 1024px) widths.
+
+Responsive conventions used in this project:
+- **Mobile-first**: base classes target mobile, `sm:` (640px) and `lg:` (1024px) prefixes handle larger screens.
+- **Layout**: prefer `flex flex-wrap` or `grid` over fixed-width single-row `flex` so items reflow naturally.
+- **Fixed pixel padding** (`px-[100px]` etc.) must always be paired with a mobile override (`px-4 sm:px-[100px]`).
+- **Header logo**: uses a 3-column `grid grid-cols-3` so the logo stays truly centered at all screen sizes.

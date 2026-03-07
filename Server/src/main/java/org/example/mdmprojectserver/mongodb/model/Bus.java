@@ -42,6 +42,7 @@ public class Bus implements Serializable {
         this.droppingPoints = droppingPoints;
         this.busType = busType;
         this.status = Status.STILL_AVAILABLE;
+        //TODO: Make the number of seats dynamic based on the bus type
         // Create 21 new seats and add them to the bus
         for(int i = 1; i <= 21; i++) {
             this.seats.add(new Seat("A" + i));

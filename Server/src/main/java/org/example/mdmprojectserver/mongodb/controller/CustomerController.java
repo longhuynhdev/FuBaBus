@@ -54,8 +54,15 @@ public class CustomerController {
         return ResponseEntity.ok(updatedCustomer);
     }
 
+    public ResponseEntity<?> updateCustomerPassword(@PathVariable String id, @RequestBody String old) {
+        
+        //TODO: Check if the old password matches the current password
+
+    }
+
     @DeleteMapping("/{id}")
     public void deleteCustomer(@PathVariable String id) {
+        //TODO: Soft delete instead of hard delete
         customerRepository.deleteById(id);
     }
 }

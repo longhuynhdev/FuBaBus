@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ChevronDown, History, KeyRound, LogOut, User } from "lucide-react";
+import { ChevronDown, History, KeyRound, LogOut, Menu, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
 	DropdownMenu,
@@ -11,12 +11,20 @@ import { useAuth } from "@/contexts/auth-context";
 import { apiFetch } from "@/lib/api";
 
 const navLinkClass =
-	"mx-2 w-32 pb-3 px-2.5 text-center font-semibold text-base uppercase text-white hover:font-extrabold hover:text-gray-200";
+	"px-2 sm:mx-2 sm:w-32 pb-1 sm:pb-3 sm:px-2.5 text-center font-semibold text-xs sm:text-base uppercase text-white hover:font-extrabold hover:text-gray-200";
 const navLinkActiveClass = "font-extrabold border-b-4 border-white";
+
+const navLinks = [
+	{ to: "/", label: "Trang chủ" },
+	{ to: "/schedule", label: "Lịch trình" },
+	{ to: "/lookup-ticket", label: "Tra cứu vé" },
+	{ to: "/invoice", label: "Hóa đơn" },
+];
 
 export function Header() {
 	const { isLoggedIn, logout } = useAuth();
 	const [userName, setUserName] = useState("User");
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	useEffect(() => {
 		if (!isLoggedIn) return;
@@ -37,121 +45,161 @@ export function Header() {
 
 	return (
 		<header
-			className="block bg-cover min-h-[180px] h-[220px] px-[30px] mx-auto relative"
+			className="block bg-orange-500 bg-cover bg-center min-h-[80px] sm:min-h-0 sm:h-[220px] px-4 sm:px-[30px] mx-auto relative z-10"
 			style={{
 				backgroundImage:
 					"url('https://futabus.vn/images/banners/home_banner.png')",
 			}}
 		>
-			{/* Top navigation */}
-			<div className="flex h-20 justify-end px-[100px]">
-				{/* Logo */}
-				<div className="z-10 mx-20">
-					<Link to="/">
-						<img
-							src="https://futabus.vn/_next/static/media/logo_new.8a0251b8.svg"
-							alt="Logo"
-							className="block w-[295px] h-auto mb-6 max-w-full"
-						/>
-					</Link>
-				</div>
+			{/* ── Mobile top bar: logo left, hamburger right ── */}
+			<div className="flex sm:hidden items-center justify-between py-3">
+				<Link to="/">
+					<img
+						src="https://futabus.vn/_next/static/media/logo_new.8a0251b8.svg"
+						alt="Logo"
+						className="w-[120px] h-auto"
+					/>
+				</Link>
+				<button
+					onClick={() => setIsMenuOpen((prev) => !prev)}
+					className="text-white p-2"
+					aria-label="Toggle menu"
+					type="button"
+				>
+					{isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+				</button>
+			</div>
 
-				{/* Login section */}
-				<div className="flex justify-end flex-grow-[0.5] flex-shrink flex-basis-0 mt-4">
-					<div className="flex items-start text-sm font-extrabold text-center leading-5 gap-4">
+			{/* ── Mobile dropdown: nav links + login ── */}
+			{isMenuOpen && (
+				<div className="sm:hidden absolute left-0 right-0 z-50 flex flex-col items-stretch bg-orange-500/95 py-2">
+					{navLinks.map(({ to, label }) => (
+						<Link
+							key={to}
+							to={to}
+							className="px-6 py-3 text-sm font-semibold uppercase text-white hover:bg-white/20"
+							activeProps={{ className: "font-extrabold border-l-4 border-white" }}
+							onClick={() => setIsMenuOpen(false)}
+						>
+							{label}
+						</Link>
+					))}
+					<div className="border-t border-white/30 mt-1 pt-1">
 						{isLoggedIn ? (
-							<DropdownMenu>
-								<DropdownMenuTrigger className="flex items-center h-8 outline-none cursor-pointer gap-4">
-									<User className="w-8 h-full text-white" />
-									<span className="font-medium text-white">{userName}</span>
-									<ChevronDown className="w-4 h-4 text-white" />
-								</DropdownMenuTrigger>
-								<DropdownMenuContent
-									align="end"
-									className="min-w-[200px] bg-white"
+							<>
+								<Link
+									to="/information"
+									className="flex items-center px-6 py-3 gap-2 text-sm text-white hover:bg-white/20"
+									onClick={() => setIsMenuOpen(false)}
 								>
-									<DropdownMenuItem asChild>
-										<Link
-											to="/information"
-											className="flex items-center p-2 cursor-pointer gap-2"
-										>
-											<User className="w-4 h-4" />
-											<span>Thông tin tài khoản</span>
-										</Link>
-									</DropdownMenuItem>
-									<DropdownMenuItem asChild>
-										<Link
-											to="/ticket-purchase-history"
-											className="flex items-center p-2 cursor-pointer gap-2"
-										>
-											<History className="w-4 h-4" />
-											<span>Lịch sử mua vé</span>
-										</Link>
-									</DropdownMenuItem>
-									<DropdownMenuItem asChild>
-										<Link
-											to="/reset-password"
-											className="flex items-center p-2 cursor-pointer gap-2"
-										>
-											<KeyRound className="w-4 h-4" />
-											<span>Đặt lại mật khẩu</span>
-										</Link>
-									</DropdownMenuItem>
-									<DropdownMenuItem
-										onClick={handleLogout}
-										className="flex items-center p-2 cursor-pointer gap-2"
-									>
-										<LogOut className="w-4 h-4" />
-										<span>Đăng xuất</span>
-									</DropdownMenuItem>
-								</DropdownMenuContent>
-							</DropdownMenu>
+									<User className="w-4 h-4" />
+									<span>{userName}</span>
+								</Link>
+								<Link
+									to="/ticket-purchase-history"
+									className="flex items-center px-6 py-3 gap-2 text-sm text-white hover:bg-white/20"
+									onClick={() => setIsMenuOpen(false)}
+								>
+									<History className="w-4 h-4" />
+									<span>Lịch sử mua vé</span>
+								</Link>
+								<Link
+									to="/reset-password"
+									className="flex items-center px-6 py-3 gap-2 text-sm text-white hover:bg-white/20"
+									onClick={() => setIsMenuOpen(false)}
+								>
+									<KeyRound className="w-4 h-4" />
+									<span>Đặt lại mật khẩu</span>
+								</Link>
+								<button
+									onClick={() => { handleLogout(); setIsMenuOpen(false); }}
+									className="flex items-center w-full px-6 py-3 gap-2 text-sm text-white hover:bg-white/20"
+									type="button"
+								>
+									<LogOut className="w-4 h-4" />
+									<span>Đăng xuất</span>
+								</button>
+							</>
 						) : (
-							<div className="flex items-center h-8 px-2 text-black bg-white w-auto gap-3 rounded-2xl whitespace-nowrap">
-								<User className="w-5 h-5" />
-								<Link to="/login" className="text-black hover:text-blue-500">
-									Đăng nhập
-								</Link>
+							<div className="flex items-center px-6 py-3 gap-3 text-sm text-white font-semibold">
+								<User className="w-4 h-4" />
+								<Link to="/login" className="hover:underline" onClick={() => setIsMenuOpen(false)}>Đăng nhập</Link>
 								<span>/</span>
-								<Link to="/register" className="text-black hover:text-blue-500">
-									Đăng ký
-								</Link>
+								<Link to="/register" className="hover:underline" onClick={() => setIsMenuOpen(false)}>Đăng ký</Link>
 							</div>
 						)}
 					</div>
 				</div>
+			)}
+
+			{/* ── Desktop top bar: 3-column grid keeps logo centered ── */}
+			<div className="hidden sm:grid grid-cols-3 items-center h-20 px-16">
+				<div />
+				<div className="flex justify-center">
+					<Link to="/">
+						<img
+							src="https://futabus.vn/_next/static/media/logo_new.8a0251b8.svg"
+							alt="Logo"
+							className="w-[295px] h-auto mb-6"
+						/>
+					</Link>
+				</div>
+				<div className="flex justify-end">
+					{isLoggedIn ? (
+						<DropdownMenu>
+							<DropdownMenuTrigger className="flex items-center h-8 outline-none cursor-pointer gap-4">
+								<User className="w-8 h-full text-white" />
+								<span className="font-medium text-white">{userName}</span>
+								<ChevronDown className="w-4 h-4 text-white" />
+							</DropdownMenuTrigger>
+							<DropdownMenuContent align="end" className="min-w-[200px] bg-white">
+								<DropdownMenuItem asChild>
+									<Link to="/information" className="flex items-center p-2 cursor-pointer gap-2">
+										<User className="w-4 h-4" />
+										<span>Thông tin tài khoản</span>
+									</Link>
+								</DropdownMenuItem>
+								<DropdownMenuItem asChild>
+									<Link to="/ticket-purchase-history" className="flex items-center p-2 cursor-pointer gap-2">
+										<History className="w-4 h-4" />
+										<span>Lịch sử mua vé</span>
+									</Link>
+								</DropdownMenuItem>
+								<DropdownMenuItem asChild>
+									<Link to="/reset-password" className="flex items-center p-2 cursor-pointer gap-2">
+										<KeyRound className="w-4 h-4" />
+										<span>Đặt lại mật khẩu</span>
+									</Link>
+								</DropdownMenuItem>
+								<DropdownMenuItem onClick={handleLogout} className="flex items-center p-2 cursor-pointer gap-2">
+									<LogOut className="w-4 h-4" />
+									<span>Đăng xuất</span>
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					) : (
+						<div className="flex items-center h-8 px-2 text-black bg-white gap-3 rounded-2xl whitespace-nowrap text-sm font-extrabold">
+							<User className="w-5 h-5" />
+							<Link to="/login" className="text-black hover:text-blue-500">Đăng nhập</Link>
+							<span>/</span>
+							<Link to="/register" className="text-black hover:text-blue-500">Đăng ký</Link>
+						</div>
+					)}
+				</div>
 			</div>
 
-			{/* Navigation menu */}
-			<nav className="flex justify-around items-center px-[100px]">
-				<Link
-					to="/"
-					className={navLinkClass}
-					activeProps={{ className: navLinkActiveClass }}
-				>
-					Trang chủ
-				</Link>
-				<Link
-					to="/schedule"
-					className={navLinkClass}
-					activeProps={{ className: navLinkActiveClass }}
-				>
-					Lịch trình
-				</Link>
-				<Link
-					to="/lookup-ticket"
-					className={navLinkClass}
-					activeProps={{ className: navLinkActiveClass }}
-				>
-					Tra cứu vé
-				</Link>
-				<Link
-					to="/invoice"
-					className={navLinkClass}
-					activeProps={{ className: navLinkActiveClass }}
-				>
-					Hóa đơn
-				</Link>
+			{/* ── Desktop nav — single row, no wrap ── */}
+			<nav className="hidden sm:flex flex-nowrap justify-around items-center px-[100px]">
+				{navLinks.map(({ to, label }) => (
+					<Link
+						key={to}
+						to={to}
+						className={navLinkClass}
+						activeProps={{ className: navLinkActiveClass }}
+					>
+						{label}
+					</Link>
+				))}
 			</nav>
 		</header>
 	);
