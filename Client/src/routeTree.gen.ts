@@ -20,7 +20,13 @@ import { Route as LookupTicketImport } from './routes/lookup-ticket'
 import { Route as LoginImport } from './routes/login'
 import { Route as InvoiceImport } from './routes/invoice'
 import { Route as InformationImport } from './routes/information'
+import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
+import { Route as DashboardIndexImport } from './routes/dashboard/index'
+import { Route as DashboardTicketsImport } from './routes/dashboard/tickets'
+import { Route as DashboardInvoicesImport } from './routes/dashboard/invoices'
+import { Route as DashboardCustomersImport } from './routes/dashboard/customers'
+import { Route as DashboardBusesImport } from './routes/dashboard/buses'
 import { Route as BookingIdImport } from './routes/booking.$id'
 
 // Create/Update Routes
@@ -79,10 +85,46 @@ const InformationRoute = InformationImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DashboardRoute = DashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardIndexRoute = DashboardIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardTicketsRoute = DashboardTicketsImport.update({
+  id: '/tickets',
+  path: '/tickets',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardInvoicesRoute = DashboardInvoicesImport.update({
+  id: '/invoices',
+  path: '/invoices',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardCustomersRoute = DashboardCustomersImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardBusesRoute = DashboardBusesImport.update({
+  id: '/buses',
+  path: '/buses',
+  getParentRoute: () => DashboardRoute,
 } as any)
 
 const BookingIdRoute = BookingIdImport.update({
@@ -100,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardImport
       parentRoute: typeof rootRoute
     }
     '/information': {
@@ -172,13 +221,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookingIdImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/buses': {
+      id: '/dashboard/buses'
+      path: '/buses'
+      fullPath: '/dashboard/buses'
+      preLoaderRoute: typeof DashboardBusesImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/customers': {
+      id: '/dashboard/customers'
+      path: '/customers'
+      fullPath: '/dashboard/customers'
+      preLoaderRoute: typeof DashboardCustomersImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/invoices': {
+      id: '/dashboard/invoices'
+      path: '/invoices'
+      fullPath: '/dashboard/invoices'
+      preLoaderRoute: typeof DashboardInvoicesImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/tickets': {
+      id: '/dashboard/tickets'
+      path: '/tickets'
+      fullPath: '/dashboard/tickets'
+      preLoaderRoute: typeof DashboardTicketsImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexImport
+      parentRoute: typeof DashboardImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface DashboardRouteChildren {
+  DashboardBusesRoute: typeof DashboardBusesRoute
+  DashboardCustomersRoute: typeof DashboardCustomersRoute
+  DashboardInvoicesRoute: typeof DashboardInvoicesRoute
+  DashboardTicketsRoute: typeof DashboardTicketsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardBusesRoute: DashboardBusesRoute,
+  DashboardCustomersRoute: DashboardCustomersRoute,
+  DashboardInvoicesRoute: DashboardInvoicesRoute,
+  DashboardTicketsRoute: DashboardTicketsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/information': typeof InformationRoute
   '/invoice': typeof InvoiceRoute
   '/login': typeof LoginRoute
@@ -189,6 +294,11 @@ export interface FileRoutesByFullPath {
   '/schedule': typeof ScheduleRoute
   '/ticket-purchase-history': typeof TicketPurchaseHistoryRoute
   '/booking/$id': typeof BookingIdRoute
+  '/dashboard/buses': typeof DashboardBusesRoute
+  '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/invoices': typeof DashboardInvoicesRoute
+  '/dashboard/tickets': typeof DashboardTicketsRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -203,11 +313,17 @@ export interface FileRoutesByTo {
   '/schedule': typeof ScheduleRoute
   '/ticket-purchase-history': typeof TicketPurchaseHistoryRoute
   '/booking/$id': typeof BookingIdRoute
+  '/dashboard/buses': typeof DashboardBusesRoute
+  '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/invoices': typeof DashboardInvoicesRoute
+  '/dashboard/tickets': typeof DashboardTicketsRoute
+  '/dashboard': typeof DashboardIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/information': typeof InformationRoute
   '/invoice': typeof InvoiceRoute
   '/login': typeof LoginRoute
@@ -218,12 +334,18 @@ export interface FileRoutesById {
   '/schedule': typeof ScheduleRoute
   '/ticket-purchase-history': typeof TicketPurchaseHistoryRoute
   '/booking/$id': typeof BookingIdRoute
+  '/dashboard/buses': typeof DashboardBusesRoute
+  '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/invoices': typeof DashboardInvoicesRoute
+  '/dashboard/tickets': typeof DashboardTicketsRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dashboard'
     | '/information'
     | '/invoice'
     | '/login'
@@ -234,6 +356,11 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/ticket-purchase-history'
     | '/booking/$id'
+    | '/dashboard/buses'
+    | '/dashboard/customers'
+    | '/dashboard/invoices'
+    | '/dashboard/tickets'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -247,9 +374,15 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/ticket-purchase-history'
     | '/booking/$id'
+    | '/dashboard/buses'
+    | '/dashboard/customers'
+    | '/dashboard/invoices'
+    | '/dashboard/tickets'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
+    | '/dashboard'
     | '/information'
     | '/invoice'
     | '/login'
@@ -260,11 +393,17 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/ticket-purchase-history'
     | '/booking/$id'
+    | '/dashboard/buses'
+    | '/dashboard/customers'
+    | '/dashboard/invoices'
+    | '/dashboard/tickets'
+    | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   InformationRoute: typeof InformationRoute
   InvoiceRoute: typeof InvoiceRoute
   LoginRoute: typeof LoginRoute
@@ -279,6 +418,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   InformationRoute: InformationRoute,
   InvoiceRoute: InvoiceRoute,
   LoginRoute: LoginRoute,
@@ -302,6 +442,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/dashboard",
         "/information",
         "/invoice",
         "/login",
@@ -316,6 +457,16 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/dashboard": {
+      "filePath": "dashboard.tsx",
+      "children": [
+        "/dashboard/buses",
+        "/dashboard/customers",
+        "/dashboard/invoices",
+        "/dashboard/tickets",
+        "/dashboard/"
+      ]
     },
     "/information": {
       "filePath": "information.tsx"
@@ -346,6 +497,26 @@ export const routeTree = rootRoute
     },
     "/booking/$id": {
       "filePath": "booking.$id.tsx"
+    },
+    "/dashboard/buses": {
+      "filePath": "dashboard/buses.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/customers": {
+      "filePath": "dashboard/customers.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/invoices": {
+      "filePath": "dashboard/invoices.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/tickets": {
+      "filePath": "dashboard/tickets.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/": {
+      "filePath": "dashboard/index.tsx",
+      "parent": "/dashboard"
     }
   }
 }

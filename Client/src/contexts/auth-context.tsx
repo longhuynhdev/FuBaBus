@@ -8,7 +8,9 @@ import {
 
 interface AuthContextType {
 	isLoggedIn: boolean;
-	login: () => void;
+	role: string | null;
+	isEmployee: boolean;
+	login: (role: string) => void;
 	logout: () => void;
 }
 
@@ -24,12 +26,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
 		return storedLoggedIn ? JSON.parse(storedLoggedIn) : false;
 	});
 
-	const login = () => {
+	const [role, setRole] = useState<string | null>(() => {
+		return localStorage.getItem("role");
+	});
+
+	const isEmployee = role === "EMPLOYEE" || role === "ADMIN";
+
+	const login = (userRole: string) => {
 		setIsLoggedIn(true);
+		setRole(userRole);
+		localStorage.setItem("role", userRole);
 	};
 
 	const logout = () => {
 		setIsLoggedIn(false);
+		setRole(null);
+		localStorage.removeItem("role");
 	};
 
 	useEffect(() => {
@@ -37,7 +49,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 	}, [isLoggedIn]);
 
 	return (
-		<AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+		<AuthContext.Provider
+			value={{ isLoggedIn, role, isEmployee, login, logout }}
+		>
 			{children}
 		</AuthContext.Provider>
 	);

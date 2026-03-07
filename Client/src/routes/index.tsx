@@ -80,9 +80,9 @@ function Index() {
 	return (
 		<div className="min-h-screen bg-gray-50">
 			<Header />
-			<main className="max-w-[1200px] mx-auto px-4 -mt-12 relative">
+			<main className="max-w-[1200px] mx-auto px-4 relative">
 				{/* Banner */}
-				<div className="mb-6">
+				<div className="mt-6 mb-6">
 					<img
 						src={bannerImage}
 						alt="Banner"

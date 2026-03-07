@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ChevronDown, History, KeyRound, LogOut, Menu, User, X } from "lucide-react";
+import { ChevronDown, History, KeyRound, LayoutDashboard, LogOut, Menu, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
 	DropdownMenu,
@@ -22,7 +22,7 @@ const navLinks = [
 ];
 
 export function Header() {
-	const { isLoggedIn, logout } = useAuth();
+	const { isLoggedIn, isEmployee, logout } = useAuth();
 	const [userName, setUserName] = useState("User");
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -45,11 +45,7 @@ export function Header() {
 
 	return (
 		<header
-			className="block bg-orange-500 bg-cover bg-center min-h-[80px] sm:min-h-0 sm:h-[220px] px-4 sm:px-[30px] mx-auto relative z-10"
-			style={{
-				backgroundImage:
-					"url('https://futabus.vn/images/banners/home_banner.png')",
-			}}
+			className="block bg-orange-500 min-h-[80px] px-4 sm:px-[30px] mx-auto relative z-10"
 		>
 			{/* ── Mobile top bar: logo left, hamburger right ── */}
 			<div className="flex sm:hidden items-center justify-between py-3">
@@ -87,6 +83,16 @@ export function Header() {
 					<div className="border-t border-white/30 mt-1 pt-1">
 						{isLoggedIn ? (
 							<>
+								{isEmployee && (
+									<Link
+										to="/dashboard"
+										className="flex items-center px-6 py-3 gap-2 text-sm text-white hover:bg-white/20"
+										onClick={() => setIsMenuOpen(false)}
+									>
+										<LayoutDashboard className="w-4 h-4" />
+										<span>Dashboard</span>
+									</Link>
+								)}
 								<Link
 									to="/information"
 									className="flex items-center px-6 py-3 gap-2 text-sm text-white hover:bg-white/20"
@@ -153,6 +159,14 @@ export function Header() {
 								<ChevronDown className="w-4 h-4 text-white" />
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align="end" className="min-w-[200px] bg-white">
+								{isEmployee && (
+									<DropdownMenuItem asChild>
+										<Link to="/dashboard" className="flex items-center p-2 cursor-pointer gap-2">
+											<LayoutDashboard className="w-4 h-4" />
+											<span>Dashboard</span>
+										</Link>
+									</DropdownMenuItem>
+								)}
 								<DropdownMenuItem asChild>
 									<Link to="/information" className="flex items-center p-2 cursor-pointer gap-2">
 										<User className="w-4 h-4" />

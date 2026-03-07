@@ -15,12 +15,13 @@ import java.util.Date;
 public class JWTGenerator {
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
-    public String generateToken(Authentication authentication) {
+    public String generateToken(Authentication authentication, String role) {
         String username = authentication.getName();
         Date currentDate = new Date();
         Date expiryDate = new Date(currentDate.getTime() + 86400000);
         String token = Jwts.builder()
                 .setSubject(username)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(key,SignatureAlgorithm.HS512)

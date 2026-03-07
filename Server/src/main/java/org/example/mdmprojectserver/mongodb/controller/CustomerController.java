@@ -55,9 +55,8 @@ public class CustomerController {
     }
 
     public ResponseEntity<?> updateCustomerPassword(@PathVariable String id, @RequestBody String old) {
-        
         //TODO: Check if the old password matches the current password
-
+        return ResponseEntity.status(501).body("Not implemented yet");
     }
 
     @DeleteMapping("/{id}")

@@ -131,6 +131,31 @@ public class BusController {
 
         return ResponseEntity.ok(savedBuses);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateBus(@PathVariable String id, @RequestBody BusDto busDto) {
+        Bus bus = this.busRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bus not found"));
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd:HH:mm");
+
+        if (busDto.getDepartureTime() != null) {
+            bus.setDepartureTime(LocalDateTime.parse(busDto.getDepartureTime(), formatter));
+            bus.setTimeType();
+        }
+        if (busDto.getArrivalTime() != null) {
+            bus.setArrivalTime(LocalDateTime.parse(busDto.getArrivalTime(), formatter));
+        }
+        if (busDto.getDepartureLocation() != null) bus.setDepartureLocation(busDto.getDepartureLocation());
+        if (busDto.getArrivalLocation() != null) bus.setArrivalLocation(busDto.getArrivalLocation());
+        if (busDto.getFare() != null) bus.setFare(busDto.getFare());
+        if (busDto.getBoardingPoints() != null) bus.setBoardingPoints(busDto.getBoardingPoints());
+        if (busDto.getDroppingPoints() != null) bus.setDroppingPoints(busDto.getDroppingPoints());
+        if (busDto.getBusType() != null) bus.setBusType(busDto.getBusType());
+        if (busDto.getStatus() != null) bus.setStatus(busDto.getStatus());
+
+        return ResponseEntity.ok(this.busRepository.save(bus));
+    }
+
     @DeleteMapping("/{id}")
     public void deleteBus(@PathVariable String id) {
         this.busRepository.deleteById(id);

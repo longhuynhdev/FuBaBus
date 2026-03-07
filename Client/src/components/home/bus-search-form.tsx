@@ -107,7 +107,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 			{/* Search inputs — stacks vertically on mobile, row on lg+ */}
 			<div className="flex flex-wrap items-end gap-3">
 				{/* Departure location */}
-				<div className="w-full sm:flex-1 sm:min-w-[180px]">
+				<div className="w-full sm:flex-1 sm:min-w-0">
 					<Label className="block mb-2 text-sm text-gray-600">Điểm đi</Label>
 					<Select
 						value={departureLocation}
@@ -143,7 +143,7 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 				</div>
 
 				{/* Arrival location */}
-				<div className="w-full sm:flex-1 sm:min-w-[180px]">
+				<div className="w-full sm:flex-1 sm:min-w-0">
 					<Label className="block mb-2 text-sm text-gray-600">Điểm đến</Label>
 					<Select value={arrivalLocation} onValueChange={setArrivalLocation}>
 						<SelectTrigger className="w-full data-[size=default]:h-16 text-base">

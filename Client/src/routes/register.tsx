@@ -11,7 +11,7 @@ function RegisterPage() {
 		<div className="min-h-screen">
 			<Header />
 			<main className="relative px-4">
-				<div className="relative -mt-20">
+				<div className="relative mt-6">
 					<RegisterForm />
 				</div>
 			</main>

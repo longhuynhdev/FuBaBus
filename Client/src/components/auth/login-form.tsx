@@ -41,7 +41,7 @@ export function LoginForm() {
 				const data = await response.json();
 				localStorage.setItem("accessToken", data.accessToken);
 				localStorage.setItem("customerId", data.customerId);
-				login();
+				login(data.role ?? "USER");
 				navigate({ to: "/" });
 			} else {
 				toast.error("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
