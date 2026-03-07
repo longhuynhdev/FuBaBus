@@ -18,7 +18,8 @@
       "mcp__plugin_playwright_playwright__browser_take_screenshot",
       "mcp__plugin_playwright_playwright__browser_resize",
       "Bash(bun install:*)",
-      "Bash(bun:*)"
+      "Bash(bun:*)",
+      "Bash(git pull:*)"
     ]
   }
 }
