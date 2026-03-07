@@ -84,8 +84,8 @@ public class AuthController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtGenerator.generateToken(authentication);
+        String token = jwtGenerator.generateToken(authentication, customer.getRole());
 
-        return new ResponseEntity<>(new AuthResponseDto(token, customer.getId()), HttpStatus.OK);
+        return new ResponseEntity<>(new AuthResponseDto(token, customer.getId(), customer.getRole()), HttpStatus.OK);
     }
 }

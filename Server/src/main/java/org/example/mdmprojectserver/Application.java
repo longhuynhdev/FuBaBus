@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
     basePackages = "org.example.mdmprojectserver.mongodb.repository"
 )
 
-@OpenAPIDefinition(info = @Info(title = "MDM Project API", version = "1.0", description = "MDM Project API"))
+@OpenAPIDefinition(info = @Info(title = "FuBaBus API", version = "1.0", description = "FuBaBus API"))
 public class Application implements CommandLineRunner {
     public Application() {
     }

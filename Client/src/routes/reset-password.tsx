@@ -10,7 +10,7 @@ function ResetPasswordPage() {
 	return (
 		<div className="min-h-screen">
 			<Header />
-			<main className="max-w-[1128px] mx-auto px-4 -mt-20 relative">
+			<main className="max-w-[1128px] mx-auto px-4 mt-6 relative">
 				<div className="flex p-6 bg-white border border-gray-200 gap-6 rounded-2xl">
 					<div className="w-[280px] flex-shrink-0">
 						<MenuGroup />

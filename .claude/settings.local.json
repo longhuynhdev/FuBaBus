@@ -6,7 +6,17 @@
       "Bash(bunx shadcn@latest add:*)",
       "Bash(bun run build)",
       "Bash(timeout 10 bun run dev:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(npx:*)",
+      "Bash(bunx:*)",
+      "Bash(./mvnw spring-boot:run:*)",
+      "Bash(chmod +x:*)",
+      "WebSearch",
+      "Bash(./mvnw clean:*)",
+      "Bash(lsof:*)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_playwright_playwright__browser_resize"
     ]
   }
 }
