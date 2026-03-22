@@ -10,6 +10,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -65,24 +67,24 @@ public class BookingService {
         return objectMapper.readValue(ticketJson, Ticket.class);
     }
 
-    public Map<String, String> confirmBooking(String busId, String customerId) throws Exception {
+    public Map<String, String> confirmBooking(String busId, String customerId, String paymentMethod) throws Exception {
         Map<String, String> ids = new HashMap<>();
         Ticket ticket = getTicket(busId, customerId);
         if (ticket != null) {
-            // Store the booking information in MongoDB
             ticketRepository.save(ticket);
-            // Remove the key from Redis
             redisTemplate.delete(busId + ":" + customerId);
             Customer customer = customerRepository.findById(ticket.getCustomerId()).orElseThrow(() -> new Exception("Customer not found"));
+            String resolvedPaymentMethod = (paymentMethod != null && !paymentMethod.isBlank()) ? paymentMethod : "ZaloPay";
+            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             Invoice invoice = new Invoice(
                     customer.getName(),
                     customer.getPhone(),
                     customer.getEmail(),
                     ticket.getTotalFare(),
-                    "ZaloPay",
+                    resolvedPaymentMethod,
                     "Confirmed",
                     ticket.getBusId(),
-                    "2024-05-05 20:00:00",
+                    timestamp,
                     ticket.getSeats().toString(),
                     ticket.getBoardingPoint()
             );

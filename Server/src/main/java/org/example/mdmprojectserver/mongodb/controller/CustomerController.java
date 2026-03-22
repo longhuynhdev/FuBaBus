@@ -1,67 +1,50 @@
 package org.example.mdmprojectserver.mongodb.controller;
 
 import jakarta.validation.Valid;
+import org.example.mdmprojectserver.mongodb.dto.ChangePasswordDto;
 import org.example.mdmprojectserver.mongodb.dto.CustomerDto;
-import org.example.mdmprojectserver.mongodb.model.Customer;
-import org.example.mdmprojectserver.mongodb.repository.CustomerRepository;
+import org.example.mdmprojectserver.mongodb.service.CustomerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/customers")
 @Validated
 public class CustomerController {
-    private final CustomerRepository customerRepository;
-    public CustomerController(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
+    private final CustomerService customerService;
+
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
     @GetMapping()
-    public List<Customer> getCustomers() {
-        return customerRepository.findAll();
+    public Page<CustomerDto> getCustomers(@PageableDefault(size = 20) Pageable pageable) {
+        return customerService.getAllCustomers(pageable);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCustomer(@PathVariable String id) {
-        return ResponseEntity.ok(customerRepository.findById(id));
+    public ResponseEntity<CustomerDto> getCustomer(@PathVariable String id) {
+        return ResponseEntity.ok(customerService.getCustomerById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCustomer(@PathVariable String id, @Valid @RequestBody CustomerDto updatedCustomerDto, BindingResult result) {
-        if (result.hasErrors()) {
-            return ResponseEntity.badRequest().body("Validation errors: " + result.getAllErrors());
-        }
-
-        Optional<Customer> optionalCustomer = customerRepository.findById(id);
-        if (!optionalCustomer.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Customer existingCustomer = optionalCustomer.get();
-        existingCustomer.setName(updatedCustomerDto.getName());
-        existingCustomer.setGender(updatedCustomerDto.getGender());
-        existingCustomer.setEmail(updatedCustomerDto.getEmail());
-        existingCustomer.setPhone(updatedCustomerDto.getPhone());
-        existingCustomer.setAddress(updatedCustomerDto.getAddress());
-        existingCustomer.setJob(updatedCustomerDto.getJob());
-
-        Customer updatedCustomer = customerRepository.save(existingCustomer);
-        return ResponseEntity.ok(updatedCustomer);
+    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable String id, @Valid @RequestBody CustomerDto updatedCustomerDto) {
+        return ResponseEntity.ok(customerService.updateCustomer(id, updatedCustomerDto));
     }
 
-    public ResponseEntity<?> updateCustomerPassword(@PathVariable String id, @RequestBody String old) {
-        //TODO: Check if the old password matches the current password
-        return ResponseEntity.status(501).body("Not implemented yet");
+    @PutMapping("/{id}/password")
+    public ResponseEntity<String> changePassword(@PathVariable String id, @Valid @RequestBody ChangePasswordDto dto) {
+        customerService.changePassword(id, dto.getCurrentPassword(), dto.getNewPassword());
+        return ResponseEntity.ok("Password changed successfully");
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable String id) {
-        //TODO: Soft delete instead of hard delete
-        customerRepository.deleteById(id);
+    public ResponseEntity<Void> deleteCustomer(@PathVariable String id) {
+        customerService.deleteCustomer(id);
+        return ResponseEntity.ok().build();
     }
 }

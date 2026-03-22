@@ -7,6 +7,8 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.UUID;
+
 @Data
 @Document(collection = "invoices")
 public class Invoice {
@@ -31,12 +33,11 @@ public class Invoice {
     private String boardingPoint;
 
     public Invoice() {
-        // Generate random invoice ID
-        this.invoiceID = generateRandomInvoiceID();
+        this.invoiceID = UUID.randomUUID().toString();
     }
 
     public Invoice(String name, String phone, String email, double price, String paymentMethod, String status, String buses, String time, String seats, String boardingPoint) {
-        this.invoiceID = generateRandomInvoiceID();
+        this.invoiceID = UUID.randomUUID().toString();
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -47,17 +48,6 @@ public class Invoice {
         this.time = time;
         this.seats = seats;
         this.boardingPoint = boardingPoint;
-    }
-
-    private String generateRandomInvoiceID() {
-        // Generate a random invoice ID with 10 characters
-        StringBuilder sb = new StringBuilder();
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        for (int i = 0; i < 10; i++) {
-            int index = (int) (Math.random() * characters.length());
-            sb.append(characters.charAt(index));
-        }
-        return sb.toString();
     }
 
     public void setPhone(String phone) {

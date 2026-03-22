@@ -2,6 +2,8 @@ package org.example.mdmprojectserver.redis.component;
 
 import org.example.mdmprojectserver.mongodb.model.Bus;
 import org.example.mdmprojectserver.mongodb.repository.BusRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class KeyExpirationListener implements MessageListener {
+
+    private static final Logger log = LoggerFactory.getLogger(KeyExpirationListener.class);
 
     private final BusRepository busRepository;
     private final RedisTemplate<String, String> redisTemplate;
@@ -21,12 +25,15 @@ public class KeyExpirationListener implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        // Parse the expired key
         String expiredKey = message.toString();
         String[] parts = expiredKey.split(":");
+        if (parts.length < 2) {
+            log.warn("Unexpected expired key format: {}", expiredKey);
+            return;
+        }
         String busId = parts[0];
         String customerId = parts[1];
-        System.out.println("Key expired: " + new String(message.getBody()));
+        log.info("Key expired: {}", expiredKey);
 
         // Find the corresponding bus in MongoDB
         Bus bus = busRepository.findById(busId).orElse(null);

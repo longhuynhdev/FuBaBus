@@ -2,17 +2,21 @@ package org.example.mdmprojectserver.mongodb.model;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Document(collection = "tickets")
 public class Ticket implements Serializable {
     @Id
     public String id;
+    @Indexed
     public String busId;
+    @Indexed
     public String customerId;
     public List<String> seats;
     public Double totalFare;
@@ -22,7 +26,7 @@ public class Ticket implements Serializable {
     }
 
     public Ticket(String busId, String customerId, List<String> seats, Double totalFare, String boardingPoint, String droppingPoint) {
-        this.id = generateRandomTicketID();
+        this.id = UUID.randomUUID().toString();
         this.busId = busId;
         this.customerId = customerId;
         this.seats = seats;
@@ -32,14 +36,4 @@ public class Ticket implements Serializable {
     }
 
 
-    private String generateRandomTicketID() {
-        // Generate a random ticket ID with 10 characters
-        StringBuilder sb = new StringBuilder();
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        for (int i = 0; i < 10; i++) {
-            int index = (int) (Math.random() * characters.length());
-            sb.append(characters.charAt(index));
-        }
-        return sb.toString();
-    }
 }

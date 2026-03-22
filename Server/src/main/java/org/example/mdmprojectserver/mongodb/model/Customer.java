@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.example.mdmprojectserver.mongodb.enums.Gender;
+import org.example.mdmprojectserver.mongodb.enums.Role;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,9 +25,10 @@ public class Customer {
     @Pattern(regexp = "^(0|\\+84)\\d{9}$", message = "Invalid phone number, phone number must start with 0 or +84, followed by exactly 9 digits")
     public String phone;
     public String password;
-    public String role;
+    public Role role;
     public String address;
     public String job;
+    public boolean active = true;
 
     public Customer() {
     }

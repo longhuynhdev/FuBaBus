@@ -37,26 +37,15 @@ public class AdminController {
         List<Bus> buses = busRepository.findAll();
         List<Invoice> invoices = invoiceRepository.findAll();
 
-        long totalBuses = buses.size();
-        long totalTickets = ticketRepository.count();
-        long totalInvoices = invoices.size();
-        long totalCustomers = customerRepository.count();
-
-        double totalRevenue = invoices.stream().mapToDouble(Invoice::getPrice).sum();
-
-        long busesAvailable = buses.stream().filter(b -> b.getStatus() == Status.STILL_AVAILABLE).count();
-        long busesFullyBooked = buses.stream().filter(b -> b.getStatus() == Status.FULLY_BOOKED).count();
-        long busesCompleted = buses.stream().filter(b -> b.getStatus() == Status.COMPLETED).count();
-
         Map<String, Object> stats = new HashMap<>();
-        stats.put("totalBuses", totalBuses);
-        stats.put("totalTickets", totalTickets);
-        stats.put("totalInvoices", totalInvoices);
-        stats.put("totalCustomers", totalCustomers);
-        stats.put("totalRevenue", totalRevenue);
-        stats.put("busesAvailable", busesAvailable);
-        stats.put("busesFullyBooked", busesFullyBooked);
-        stats.put("busesCompleted", busesCompleted);
+        stats.put("totalBuses", buses.size());
+        stats.put("totalTickets", ticketRepository.count());
+        stats.put("totalInvoices", invoices.size());
+        stats.put("totalCustomers", customerRepository.count());
+        stats.put("totalRevenue", invoices.stream().mapToDouble(Invoice::getPrice).sum());
+        stats.put("busesAvailable", buses.stream().filter(b -> b.getStatus() == Status.STILL_AVAILABLE).count());
+        stats.put("busesFullyBooked", buses.stream().filter(b -> b.getStatus() == Status.FULLY_BOOKED).count());
+        stats.put("busesCompleted", buses.stream().filter(b -> b.getStatus() == Status.COMPLETED).count());
 
         return stats;
     }

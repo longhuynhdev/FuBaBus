@@ -5,6 +5,9 @@ import org.example.mdmprojectserver.mongodb.enums.BusType;
 import org.example.mdmprojectserver.mongodb.enums.Status;
 import org.example.mdmprojectserver.mongodb.enums.TimeType;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -14,9 +17,12 @@ import java.util.List;
 
 @Data
 @Document(collection = "buses")
+@CompoundIndex(name = "search_idx", def = "{'departureLocation': 1, 'arrivalLocation': 1, 'departureTime': 1}")
 public class Bus implements Serializable {
     @Id
     public String id;
+    @Version
+    public Long version;
     public LocalDateTime departureTime;
     public String departureLocation;
     public TimeType timeType;
@@ -42,9 +48,12 @@ public class Bus implements Serializable {
         this.droppingPoints = droppingPoints;
         this.busType = busType;
         this.status = Status.STILL_AVAILABLE;
-        //TODO: Make the number of seats dynamic based on the bus type
-        // Create 21 new seats and add them to the bus
-        for(int i = 1; i <= 21; i++) {
+        int seatCount = switch (busType) {
+            case GHẾ -> 45;
+            case GIƯỜNG -> 21;
+            case LIMOUSINE -> 16;
+        };
+        for (int i = 1; i <= seatCount; i++) {
             this.seats.add(new Seat("A" + i));
         }
     }
