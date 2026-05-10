@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import org.example.mdmprojectserver.mongodb.enums.Role;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new User(customer.getPhone(), customer.getPassword(), mapRolesToAuthorities(customer.getRole()));
     }
 
-    private Collection<GrantedAuthority> mapRolesToAuthorities(String role) {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role));
+    private Collection<GrantedAuthority> mapRolesToAuthorities(Role role) {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 }

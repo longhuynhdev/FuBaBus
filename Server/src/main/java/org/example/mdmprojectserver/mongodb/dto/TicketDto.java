@@ -1,6 +1,8 @@
 package org.example.mdmprojectserver.mongodb.dto;
+
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
-import org.example.mdmprojectserver.mongodb.enums.BusType;
 
 import java.util.List;
 
@@ -12,4 +14,12 @@ public class TicketDto {
     public Double totalFare;
     public String boardingPoint;
     public String droppingPoint;
+
+    @NotEmpty(message = "Name is required for booking")
+    public String name;
+
+    @Pattern(regexp = "^(0|\\+84)\\d{9}$", message = "Invalid phone number")
+    public String phone;
+
+    public String email;
 }

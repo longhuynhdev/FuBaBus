@@ -45,6 +45,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/buses/**").permitAll()
                         .requestMatchers("/api/buses/search").permitAll()
                         .requestMatchers("/api/bookings/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/tickets/*/phone/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/invoices/phone/**").permitAll()
                         .requestMatchers("/api/admin/**").hasAnyRole("EMPLOYEE", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/buses/**").hasAnyRole("EMPLOYEE", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/buses/**").hasAnyRole("EMPLOYEE", "ADMIN")
@@ -52,7 +54,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/tickets/**").hasAnyRole("EMPLOYEE", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/invoices/**").hasAnyRole("EMPLOYEE", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/customers/**").hasAnyRole("EMPLOYEE", "ADMIN")
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
                 .exceptionHandling(exception -> exception

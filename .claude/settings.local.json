@@ -19,7 +19,10 @@
       "mcp__plugin_playwright_playwright__browser_resize",
       "Bash(bun install:*)",
       "Bash(bun:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(./mvnw compile:*)",
+      "Bash(./mvnw test:*)",
+      "mcp__claude_ai_Mermaid_Chart__validate_and_render_mermaid_diagram"
     ]
   }
 }

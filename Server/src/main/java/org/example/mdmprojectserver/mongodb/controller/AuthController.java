@@ -5,6 +5,7 @@ import org.example.mdmprojectserver.mongodb.dto.AuthResponseDto;
 import org.example.mdmprojectserver.mongodb.dto.LoginDto;
 import org.example.mdmprojectserver.mongodb.dto.RegisterDto;
 import org.example.mdmprojectserver.mongodb.enums.Gender;
+import org.example.mdmprojectserver.mongodb.enums.Role;
 import org.example.mdmprojectserver.mongodb.model.Customer;
 import org.example.mdmprojectserver.mongodb.repository.CustomerRepository;
 import org.example.mdmprojectserver.mongodb.security.JWTGenerator;
@@ -44,21 +45,20 @@ public class AuthController {
     @PostMapping("register")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterDto registerDto, BindingResult result) {
 
-        //TODO: Add validation for phone number format and email format
-//        if (result.hasErrors()) {
-//            return ResponseEntity.badRequest().body("Validation errors: " + result.getAllErrors());
-//        }
-//
-//        if(customerRepository.findByPhone(registerDto.getPhone()).isPresent()) {
-//            return new ResponseEntity<>("Phone number is already in the system", HttpStatus.BAD_REQUEST);
-//        }
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest().body("Validation errors: " + result.getAllErrors());
+        }
+
+        if(customerRepository.findByPhone(registerDto.getPhone()).isPresent()) {
+            return new ResponseEntity<>("Phone number is already in the system", HttpStatus.BAD_REQUEST);
+        }
 
         Customer customer = new Customer();
         customer.setPhone(registerDto.getPhone());
         customer.setEmail(registerDto.getEmail());
         customer.setName(registerDto.getName());
         customer.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-        customer.setRole("USER");
+        customer.setRole(Role.USER);
         customer.setGender(Gender.MALE);
 
         customerRepository.save(customer);
@@ -68,24 +68,17 @@ public class AuthController {
 
     @PostMapping("login")
     public ResponseEntity<AuthResponseDto> login(@Valid @RequestBody LoginDto loginDto) {
-        // Find customer first
-        Customer customer = customerRepository.findByPhone(loginDto.getPhone())
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
-
-        // Verify password
-        if (!passwordEncoder.matches(loginDto.getPassword(), customer.getPassword())) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        // Create authentication token
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                customer.getPhone(),
-                loginDto.getPassword()
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDto.getPhone(), loginDto.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtGenerator.generateToken(authentication, customer.getRole());
 
-        return new ResponseEntity<>(new AuthResponseDto(token, customer.getId(), customer.getRole()), HttpStatus.OK);
+        Customer customer = customerRepository.findByPhone(loginDto.getPhone())
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        String token = jwtGenerator.generateToken(authentication, customer.getRole().name());
+
+        return new ResponseEntity<>(new AuthResponseDto(token, customer.getId(), customer.getRole().name()), HttpStatus.OK);
     }
 }

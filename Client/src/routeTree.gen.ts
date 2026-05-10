@@ -8,278 +8,110 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as TicketPurchaseHistoryRouteImport } from './routes/ticket-purchase-history'
+import { Route as ScheduleRouteImport } from './routes/schedule'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as PaymentRouteImport } from './routes/payment'
+import { Route as LookupTicketRouteImport } from './routes/lookup-ticket'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as InvoiceRouteImport } from './routes/invoice'
+import { Route as InformationRouteImport } from './routes/information'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardTicketsRouteImport } from './routes/dashboard/tickets'
+import { Route as DashboardInvoicesRouteImport } from './routes/dashboard/invoices'
+import { Route as DashboardCustomersRouteImport } from './routes/dashboard/customers'
+import { Route as DashboardBusesRouteImport } from './routes/dashboard/buses'
+import { Route as BookingIdRouteImport } from './routes/booking.$id'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as TicketPurchaseHistoryImport } from './routes/ticket-purchase-history'
-import { Route as ScheduleImport } from './routes/schedule'
-import { Route as ResetPasswordImport } from './routes/reset-password'
-import { Route as RegisterImport } from './routes/register'
-import { Route as PaymentImport } from './routes/payment'
-import { Route as LookupTicketImport } from './routes/lookup-ticket'
-import { Route as LoginImport } from './routes/login'
-import { Route as InvoiceImport } from './routes/invoice'
-import { Route as InformationImport } from './routes/information'
-import { Route as DashboardImport } from './routes/dashboard'
-import { Route as IndexImport } from './routes/index'
-import { Route as DashboardIndexImport } from './routes/dashboard/index'
-import { Route as DashboardTicketsImport } from './routes/dashboard/tickets'
-import { Route as DashboardInvoicesImport } from './routes/dashboard/invoices'
-import { Route as DashboardCustomersImport } from './routes/dashboard/customers'
-import { Route as DashboardBusesImport } from './routes/dashboard/buses'
-import { Route as BookingIdImport } from './routes/booking.$id'
-
-// Create/Update Routes
-
-const TicketPurchaseHistoryRoute = TicketPurchaseHistoryImport.update({
+const TicketPurchaseHistoryRoute = TicketPurchaseHistoryRouteImport.update({
   id: '/ticket-purchase-history',
   path: '/ticket-purchase-history',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const ScheduleRoute = ScheduleImport.update({
+const ScheduleRoute = ScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const ResetPasswordRoute = ResetPasswordImport.update({
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const RegisterRoute = RegisterImport.update({
+const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const PaymentRoute = PaymentImport.update({
+const PaymentRoute = PaymentRouteImport.update({
   id: '/payment',
   path: '/payment',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LookupTicketRoute = LookupTicketImport.update({
+const LookupTicketRoute = LookupTicketRouteImport.update({
   id: '/lookup-ticket',
   path: '/lookup-ticket',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LoginRoute = LoginImport.update({
+const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const InvoiceRoute = InvoiceImport.update({
+const InvoiceRoute = InvoiceRouteImport.update({
   id: '/invoice',
   path: '/invoice',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const InformationRoute = InformationImport.update({
+const InformationRoute = InformationRouteImport.update({
   id: '/information',
   path: '/information',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const DashboardRoute = DashboardImport.update({
+const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const DashboardIndexRoute = DashboardIndexImport.update({
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardRoute,
 } as any)
-
-const DashboardTicketsRoute = DashboardTicketsImport.update({
+const DashboardTicketsRoute = DashboardTicketsRouteImport.update({
   id: '/tickets',
   path: '/tickets',
   getParentRoute: () => DashboardRoute,
 } as any)
-
-const DashboardInvoicesRoute = DashboardInvoicesImport.update({
+const DashboardInvoicesRoute = DashboardInvoicesRouteImport.update({
   id: '/invoices',
   path: '/invoices',
   getParentRoute: () => DashboardRoute,
 } as any)
-
-const DashboardCustomersRoute = DashboardCustomersImport.update({
+const DashboardCustomersRoute = DashboardCustomersRouteImport.update({
   id: '/customers',
   path: '/customers',
   getParentRoute: () => DashboardRoute,
 } as any)
-
-const DashboardBusesRoute = DashboardBusesImport.update({
+const DashboardBusesRoute = DashboardBusesRouteImport.update({
   id: '/buses',
   path: '/buses',
   getParentRoute: () => DashboardRoute,
 } as any)
-
-const BookingIdRoute = BookingIdImport.update({
+const BookingIdRoute = BookingIdRouteImport.update({
   id: '/booking/$id',
   path: '/booking/$id',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-// Populate the FileRoutesByPath interface
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardImport
-      parentRoute: typeof rootRoute
-    }
-    '/information': {
-      id: '/information'
-      path: '/information'
-      fullPath: '/information'
-      preLoaderRoute: typeof InformationImport
-      parentRoute: typeof rootRoute
-    }
-    '/invoice': {
-      id: '/invoice'
-      path: '/invoice'
-      fullPath: '/invoice'
-      preLoaderRoute: typeof InvoiceImport
-      parentRoute: typeof rootRoute
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/lookup-ticket': {
-      id: '/lookup-ticket'
-      path: '/lookup-ticket'
-      fullPath: '/lookup-ticket'
-      preLoaderRoute: typeof LookupTicketImport
-      parentRoute: typeof rootRoute
-    }
-    '/payment': {
-      id: '/payment'
-      path: '/payment'
-      fullPath: '/payment'
-      preLoaderRoute: typeof PaymentImport
-      parentRoute: typeof rootRoute
-    }
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterImport
-      parentRoute: typeof rootRoute
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordImport
-      parentRoute: typeof rootRoute
-    }
-    '/schedule': {
-      id: '/schedule'
-      path: '/schedule'
-      fullPath: '/schedule'
-      preLoaderRoute: typeof ScheduleImport
-      parentRoute: typeof rootRoute
-    }
-    '/ticket-purchase-history': {
-      id: '/ticket-purchase-history'
-      path: '/ticket-purchase-history'
-      fullPath: '/ticket-purchase-history'
-      preLoaderRoute: typeof TicketPurchaseHistoryImport
-      parentRoute: typeof rootRoute
-    }
-    '/booking/$id': {
-      id: '/booking/$id'
-      path: '/booking/$id'
-      fullPath: '/booking/$id'
-      preLoaderRoute: typeof BookingIdImport
-      parentRoute: typeof rootRoute
-    }
-    '/dashboard/buses': {
-      id: '/dashboard/buses'
-      path: '/buses'
-      fullPath: '/dashboard/buses'
-      preLoaderRoute: typeof DashboardBusesImport
-      parentRoute: typeof DashboardImport
-    }
-    '/dashboard/customers': {
-      id: '/dashboard/customers'
-      path: '/customers'
-      fullPath: '/dashboard/customers'
-      preLoaderRoute: typeof DashboardCustomersImport
-      parentRoute: typeof DashboardImport
-    }
-    '/dashboard/invoices': {
-      id: '/dashboard/invoices'
-      path: '/invoices'
-      fullPath: '/dashboard/invoices'
-      preLoaderRoute: typeof DashboardInvoicesImport
-      parentRoute: typeof DashboardImport
-    }
-    '/dashboard/tickets': {
-      id: '/dashboard/tickets'
-      path: '/tickets'
-      fullPath: '/dashboard/tickets'
-      preLoaderRoute: typeof DashboardTicketsImport
-      parentRoute: typeof DashboardImport
-    }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexImport
-      parentRoute: typeof DashboardImport
-    }
-  }
-}
-
-// Create and export the route tree
-
-interface DashboardRouteChildren {
-  DashboardBusesRoute: typeof DashboardBusesRoute
-  DashboardCustomersRoute: typeof DashboardCustomersRoute
-  DashboardInvoicesRoute: typeof DashboardInvoicesRoute
-  DashboardTicketsRoute: typeof DashboardTicketsRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
-}
-
-const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardBusesRoute: DashboardBusesRoute,
-  DashboardCustomersRoute: DashboardCustomersRoute,
-  DashboardInvoicesRoute: DashboardInvoicesRoute,
-  DashboardTicketsRoute: DashboardTicketsRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
-}
-
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
-)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -300,7 +132,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/tickets': typeof DashboardTicketsRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
-
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/information': typeof InformationRoute
@@ -319,9 +150,8 @@ export interface FileRoutesByTo {
   '/dashboard/tickets': typeof DashboardTicketsRoute
   '/dashboard': typeof DashboardIndexRoute
 }
-
 export interface FileRoutesById {
-  __root__: typeof rootRoute
+  __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/information': typeof InformationRoute
@@ -340,7 +170,6 @@ export interface FileRoutesById {
   '/dashboard/tickets': typeof DashboardTicketsRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
-
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
@@ -400,7 +229,6 @@ export interface FileRouteTypes {
     | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
-
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRouteWithChildren
@@ -416,6 +244,150 @@ export interface RootRouteChildren {
   BookingIdRoute: typeof BookingIdRoute
 }
 
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/ticket-purchase-history': {
+      id: '/ticket-purchase-history'
+      path: '/ticket-purchase-history'
+      fullPath: '/ticket-purchase-history'
+      preLoaderRoute: typeof TicketPurchaseHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schedule': {
+      id: '/schedule'
+      path: '/schedule'
+      fullPath: '/schedule'
+      preLoaderRoute: typeof ScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payment': {
+      id: '/payment'
+      path: '/payment'
+      fullPath: '/payment'
+      preLoaderRoute: typeof PaymentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lookup-ticket': {
+      id: '/lookup-ticket'
+      path: '/lookup-ticket'
+      fullPath: '/lookup-ticket'
+      preLoaderRoute: typeof LookupTicketRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invoice': {
+      id: '/invoice'
+      path: '/invoice'
+      fullPath: '/invoice'
+      preLoaderRoute: typeof InvoiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/information': {
+      id: '/information'
+      path: '/information'
+      fullPath: '/information'
+      preLoaderRoute: typeof InformationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/tickets': {
+      id: '/dashboard/tickets'
+      path: '/tickets'
+      fullPath: '/dashboard/tickets'
+      preLoaderRoute: typeof DashboardTicketsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/invoices': {
+      id: '/dashboard/invoices'
+      path: '/invoices'
+      fullPath: '/dashboard/invoices'
+      preLoaderRoute: typeof DashboardInvoicesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/customers': {
+      id: '/dashboard/customers'
+      path: '/customers'
+      fullPath: '/dashboard/customers'
+      preLoaderRoute: typeof DashboardCustomersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/buses': {
+      id: '/dashboard/buses'
+      path: '/buses'
+      fullPath: '/dashboard/buses'
+      preLoaderRoute: typeof DashboardBusesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/booking/$id': {
+      id: '/booking/$id'
+      path: '/booking/$id'
+      fullPath: '/booking/$id'
+      preLoaderRoute: typeof BookingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
+}
+
+interface DashboardRouteChildren {
+  DashboardBusesRoute: typeof DashboardBusesRoute
+  DashboardCustomersRoute: typeof DashboardCustomersRoute
+  DashboardInvoicesRoute: typeof DashboardInvoicesRoute
+  DashboardTicketsRoute: typeof DashboardTicketsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardBusesRoute: DashboardBusesRoute,
+  DashboardCustomersRoute: DashboardCustomersRoute,
+  DashboardInvoicesRoute: DashboardInvoicesRoute,
+  DashboardTicketsRoute: DashboardTicketsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRouteWithChildren,
@@ -430,94 +402,6 @@ const rootRouteChildren: RootRouteChildren = {
   TicketPurchaseHistoryRoute: TicketPurchaseHistoryRoute,
   BookingIdRoute: BookingIdRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/dashboard",
-        "/information",
-        "/invoice",
-        "/login",
-        "/lookup-ticket",
-        "/payment",
-        "/register",
-        "/reset-password",
-        "/schedule",
-        "/ticket-purchase-history",
-        "/booking/$id"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/dashboard": {
-      "filePath": "dashboard.tsx",
-      "children": [
-        "/dashboard/buses",
-        "/dashboard/customers",
-        "/dashboard/invoices",
-        "/dashboard/tickets",
-        "/dashboard/"
-      ]
-    },
-    "/information": {
-      "filePath": "information.tsx"
-    },
-    "/invoice": {
-      "filePath": "invoice.tsx"
-    },
-    "/login": {
-      "filePath": "login.tsx"
-    },
-    "/lookup-ticket": {
-      "filePath": "lookup-ticket.tsx"
-    },
-    "/payment": {
-      "filePath": "payment.tsx"
-    },
-    "/register": {
-      "filePath": "register.tsx"
-    },
-    "/reset-password": {
-      "filePath": "reset-password.tsx"
-    },
-    "/schedule": {
-      "filePath": "schedule.tsx"
-    },
-    "/ticket-purchase-history": {
-      "filePath": "ticket-purchase-history.tsx"
-    },
-    "/booking/$id": {
-      "filePath": "booking.$id.tsx"
-    },
-    "/dashboard/buses": {
-      "filePath": "dashboard/buses.tsx",
-      "parent": "/dashboard"
-    },
-    "/dashboard/customers": {
-      "filePath": "dashboard/customers.tsx",
-      "parent": "/dashboard"
-    },
-    "/dashboard/invoices": {
-      "filePath": "dashboard/invoices.tsx",
-      "parent": "/dashboard"
-    },
-    "/dashboard/tickets": {
-      "filePath": "dashboard/tickets.tsx",
-      "parent": "/dashboard"
-    },
-    "/dashboard/": {
-      "filePath": "dashboard/index.tsx",
-      "parent": "/dashboard"
-    }
-  }
-}
-ROUTE_MANIFEST_END */

@@ -4,6 +4,8 @@ import org.example.mdmprojectserver.mongodb.model.Bus;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -11,4 +13,8 @@ public interface BusRepository extends MongoRepository<Bus, String> {
     boolean existsById(String id);
     Optional<Bus> findById(String invoiceID);
     Bus getBusById(String id);
+
+    List<Bus> findByDepartureLocationAndArrivalLocationAndDepartureTimeBetween(
+            String departureLocation, String arrivalLocation,
+            LocalDateTime start, LocalDateTime end);
 }

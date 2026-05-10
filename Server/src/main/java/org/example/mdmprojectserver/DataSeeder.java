@@ -1,14 +1,19 @@
 package org.example.mdmprojectserver;
 
 import org.example.mdmprojectserver.mongodb.enums.Gender;
+import org.example.mdmprojectserver.mongodb.enums.Role;
 import org.example.mdmprojectserver.mongodb.model.Customer;
 import org.example.mdmprojectserver.mongodb.repository.CustomerRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DataSeeder implements CommandLineRunner {
+
+    private static final Logger log = LoggerFactory.getLogger(DataSeeder.class);
 
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
@@ -34,10 +39,10 @@ public class DataSeeder implements CommandLineRunner {
             admin.setPhone(adminPhone);
             admin.setEmail(adminEmail);
             admin.setPassword(passwordEncoder.encode(adminPassword));
-            admin.setRole("ADMIN");
+            admin.setRole(Role.ADMIN);
             admin.setGender(Gender.MALE);
             customerRepository.save(admin);
-            System.out.println("Admin account seeded: 0123456789 / admin123");
+            log.info("Admin account seeded: 0123456789 / admin123");
         }
 
         if (customerRepository.findByPhone(employeePhone).isEmpty()) {
@@ -46,10 +51,10 @@ public class DataSeeder implements CommandLineRunner {
             employee.setPhone(employeePhone);
             employee.setEmail(employeeEmail);
             employee.setPassword(passwordEncoder.encode(employeePassword));
-            employee.setRole("EMPLOYEE");
+            employee.setRole(Role.EMPLOYEE);
             employee.setGender(Gender.MALE);
             customerRepository.save(employee);
-            System.out.println("Employee account seeded: 0123456888 / employee123");
+            log.info("Employee account seeded: 0123456888 / employee123");
         }
     }
 }

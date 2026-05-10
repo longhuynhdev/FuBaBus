@@ -8,6 +8,7 @@ import org.example.mdmprojectserver.mongodb.enums.Gender;
 
 @Data
 public class CustomerDto {
+    private String id;
     @NotEmpty(message = "Name must not be empty")
     private String name;
     private Gender gender;
