@@ -1,5 +1,5 @@
-# Bus Ticket Booking System
-This project is a comprehensive solution for booking bus tickets. 
+# FuBaBus
+A bus ticket booking system
 
 ## Tech Stack
 - **Server-side:** Spring Boot
