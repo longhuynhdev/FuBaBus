@@ -1,7 +1,6 @@
 package org.example.mdmprojectserver.redis.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -12,7 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.time.Duration;
 
 @Configuration
-public class RedisConfig extends CachingConfigurerSupport {
+public class RedisConfig {
 
     @Value("${spring.data.redis.host:localhost}")
     private String host;

@@ -2,26 +2,25 @@ package org.example.mdmprojectserver.mongodb.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Base64;
 import java.util.Date;
 
 @Component
 public class JWTGenerator {
-    private final Key key;
+    private final SecretKey key;
 
     public JWTGenerator(@Value("${JWT_SECRET:}") String jwtSecret) {
         if (jwtSecret != null && !jwtSecret.isBlank()) {
             this.key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(jwtSecret));
         } else {
-            this.key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+            this.key = Jwts.SIG.HS512.key().build();
         }
     }
 
@@ -30,31 +29,31 @@ public class JWTGenerator {
         Date currentDate = new Date();
         Date expiryDate = new Date(currentDate.getTime() + 86400000);
         String token = Jwts.builder()
-                .setSubject(username)
+                .subject(username)
                 .claim("role", role)
-                .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .issuedAt(currentDate)
+                .expiration(expiryDate)
+                .signWith(key, Jwts.SIG.HS512)
                 .compact();
         return token;
     }
 
     public String getUsernameFromToken(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
+        Claims claims = Jwts.parser()
+                .verifyWith(key)
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
         return claims.getSubject();
     }
 
     public boolean validateToken(String token) {
         try {
             Jwts
-                    .parserBuilder()
-                    .setSigningKey(key)
+                    .parser()
+                    .verifyWith(key)
                     .build()
-                    .parseClaimsJws(token);
+                    .parseSignedClaims(token);
             return true;
         } catch (Exception e) {
             throw new AuthenticationCredentialsNotFoundException("Expired or invalid JWT token");

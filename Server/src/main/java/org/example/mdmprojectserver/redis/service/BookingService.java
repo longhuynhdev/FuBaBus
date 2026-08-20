@@ -1,6 +1,5 @@
 package org.example.mdmprojectserver.redis.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.mdmprojectserver.mongodb.model.*;
 import org.example.mdmprojectserver.mongodb.repository.BusRepository;
 import org.example.mdmprojectserver.mongodb.repository.CustomerRepository;
@@ -9,12 +8,13 @@ import org.example.mdmprojectserver.mongodb.repository.TicketRepository;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class BookingService {
@@ -23,24 +23,25 @@ public class BookingService {
     private InvoiceRepository invoiceRepository;
     private BusRepository busRepository;
     private CustomerRepository customerRepository;
+    private final ObjectMapper objectMapper;
 
-    public BookingService(StringRedisTemplate redisTemplate, TicketRepository ticketRepository, InvoiceRepository invoiceRepository, BusRepository busRepository, CustomerRepository customerRepository) {
+    public BookingService(StringRedisTemplate redisTemplate, TicketRepository ticketRepository, InvoiceRepository invoiceRepository, BusRepository busRepository, CustomerRepository customerRepository, ObjectMapper objectMapper) {
         this.redisTemplate = redisTemplate;
         this.ticketRepository = ticketRepository;
         this.invoiceRepository = invoiceRepository;
         this.busRepository = busRepository;
         this.customerRepository = customerRepository;
+        this.objectMapper = objectMapper;
     }
 
 
     public void bookTicket(Ticket ticket) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
         String ticketJson = objectMapper.writeValueAsString(ticket);
         // Create a key for the ticket in Redis
         String key = ticket.getBusId() + ":" + ticket.getCustomerId();
 
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        ops.set(key, ticketJson, 30, TimeUnit.SECONDS);
+        ops.set(key, ticketJson, Duration.ofSeconds(30));
 
         // Update the "seats" information on "buses" in MongoDB
         Bus bus = busRepository.findById(ticket.getBusId()).orElseThrow(() -> new Exception("Bus not found"));
@@ -63,7 +64,6 @@ public class BookingService {
             throw new Exception("No ticket found for busId: " + busId + " and customerId: " + customerId);
         }
 
-        ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(ticketJson, Ticket.class);
     }
 

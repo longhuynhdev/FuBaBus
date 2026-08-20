@@ -9,10 +9,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@SpringBootApplication(exclude = {
-    org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration.class,
-    org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration.class
-})
+// The former DataSource/HibernateJpa excludes were dropped: Spring Boot 4 moved those
+// auto-configurations into optional modules that this project does not depend on, so
+// there is nothing left to exclude.
+@SpringBootApplication
 
 @EnableMongoRepositories(
     basePackages = "org.example.mdmprojectserver.mongodb.repository"

@@ -31,12 +31,21 @@ Run from `MDM-Project.Server/`:
 
 Swagger UI: `http://localhost:8080/swagger-ui/index.html`
 
+### Profiles
+
+- **`dev`** (default, `application-dev.properties`) — connects to Mongo/Redis on `localhost` via `./mvnw spring-boot:run`. This is what the commands above use.
+- **`prod`** (`application-prod.properties`) — hostnames default to the Docker Compose service names (`redis`, etc.), so it's meant to run via `docker compose up --build` in `Server/`, not directly on the host. `spring.data.redis.host`/`port`/`password` can be overridden with `REDIS_HOST`/`REDIS_PORT`/`REDIS_PASSWORD` env vars if you need to run `prod` outside compose (e.g. `REDIS_HOST=localhost ./mvnw spring-boot:run -Dspring-boot.run.profiles=prod`).
+
 ### Database Setup (Docker required)
+
+For the `dev` profile:
 
 ```bash
 docker run -d -p 27017:27017 --name mongo -e MONGO_INITDB_ROOT_USERNAME=mongo -e MONGO_INITDB_ROOT_PASSWORD=mongo mongodb/mongodb-community-server:latest
-docker run -d -p 6379:6379 --name redis redis:latest
+docker run -d -p 6379:6379 --name redis redis:latest redis-server --notify-keyspace-events Ex
 ```
+
+`--notify-keyspace-events Ex` is required for `KeyExpirationListener` to receive seat-release events on booking TTL expiry.
 
 ## Client Architecture
 

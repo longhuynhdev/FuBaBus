@@ -21,7 +21,7 @@ public class Customer {
     @Email(message = "Email should be valid")
     public String email;
 
-    @Indexed(unique = true, background = true)
+    @Indexed(unique = true)
     @Pattern(regexp = "^(0|\\+84)\\d{9}$", message = "Invalid phone number, phone number must start with 0 or +84, followed by exactly 9 digits")
     public String phone;
     public String password;
