@@ -5,14 +5,12 @@ import org.example.mdmprojectserver.mongodb.dto.InvoiceDto;
 import org.example.mdmprojectserver.mongodb.model.Invoice;
 import org.example.mdmprojectserver.mongodb.service.InvoiceService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/invoices")
-@Validated
 public class InvoiceController {
     private final InvoiceService invoiceService;
 

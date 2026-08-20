@@ -23,9 +23,16 @@ public class KeyExpirationListener implements MessageListener {
         this.redisTemplate = redisTemplate;
     }
 
+    /** Refresh tokens share this Redis database but are not booking holds. */
+    private static final String REFRESH_TOKEN_PREFIX = "refresh:";
+
     @Override
     public void onMessage(Message message, byte[] pattern) {
         String expiredKey = message.toString();
+        if (expiredKey.startsWith(REFRESH_TOKEN_PREFIX)) {
+            // An expired refresh token releases no seats — nothing to do.
+            return;
+        }
         String[] parts = expiredKey.split(":");
         if (parts.length < 2) {
             log.warn("Unexpected expired key format: {}", expiredKey);

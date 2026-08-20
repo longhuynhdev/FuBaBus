@@ -29,7 +29,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Customer customer = customerRepository.findByPhone(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-        return new User(customer.getPhone(), customer.getPassword(), mapRolesToAuthorities(customer.getRole()));
+        // customer.active is honoured here so a deactivated account cannot log in — without it,
+        // deactivation would have no effect on authentication at all.
+        return User.withUsername(customer.getPhone())
+                .password(customer.getPassword())
+                .disabled(!customer.isActive())
+                .authorities(mapRolesToAuthorities(customer.getRole()))
+                .build();
     }
 
     private Collection<GrantedAuthority> mapRolesToAuthorities(Role role) {

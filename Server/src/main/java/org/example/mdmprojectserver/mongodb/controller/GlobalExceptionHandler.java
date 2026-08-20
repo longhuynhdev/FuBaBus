@@ -1,15 +1,17 @@
 package org.example.mdmprojectserver.mongodb.controller;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -34,8 +36,41 @@ public class GlobalExceptionHandler {
         ));
     }
 
-    @ExceptionHandler({BadCredentialsException.class, UsernameNotFoundException.class})
-    public ResponseEntity<Map<String, Object>> handleAuthException(Exception ex) {
+    /**
+     * Constraint violations raised by method validation rather than by request-body binding —
+     * for instance a constrained {@code @RequestParam}, or any bean annotated {@code @Validated}.
+     * Without this they reach the catch-all below and are reported as 500s.
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleConstraintViolation(ConstraintViolationException ex) {
+        String message = ex.getConstraintViolations().stream()
+                .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+                .collect(Collectors.joining("; "));
+        return ResponseEntity.badRequest().body(Map.of(
+                "error", message.isEmpty() ? "Validation failed" : message,
+                "status", 400
+        ));
+    }
+
+    /** The Spring 6.1+ built-in equivalent for controller method parameters. */
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<Map<String, Object>> handleHandlerMethodValidation(HandlerMethodValidationException ex) {
+        String message = ex.getAllErrors().stream()
+                .map(error -> error.getDefaultMessage() != null ? error.getDefaultMessage() : "invalid value")
+                .collect(Collectors.joining("; "));
+        return ResponseEntity.badRequest().body(Map.of(
+                "error", message.isEmpty() ? "Validation failed" : message,
+                "status", 400
+        ));
+    }
+
+    /**
+     * Covers the whole AuthenticationException family — bad credentials, unknown user, and
+     * disabled/locked accounts alike. They all answer with the same opaque message so the
+     * response cannot be used to probe which phone numbers are registered or deactivated.
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Map<String, Object>> handleAuthException(AuthenticationException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
                 "error", "Invalid credentials",
                 "status", 401

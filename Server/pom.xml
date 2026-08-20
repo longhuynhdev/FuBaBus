@@ -16,14 +16,8 @@
     <properties>
         <java.version>25</java.version>
         <springdoc-openapi.version>3.1.0</springdoc-openapi.version>
-        <jjwt.version>0.13.0</jjwt.version>
     </properties>
 
-    <!-- NOTE: do not import io.jsonwebtoken:jjwt-bom here. It pins jackson-databind to
-         2.12.7.1, and a BOM imported in this POM outranks the jackson-2-bom that
-         spring-boot-dependencies imports, so it downgrades jackson-databind for the whole
-         build (swagger-core included) while jackson-core/annotations stay at 2.21.4.
-         Version each jjwt module from ${jjwt.version} instead. -->
     <dependencies>
 
         <dependency>
@@ -73,26 +67,12 @@
         </dependency>
 
         <!--JWT-->
+        <!-- Spring Security's own JWT support (Nimbus-backed JwtEncoder/JwtDecoder plus the
+             BearerTokenAuthenticationFilter). Replaces the former jjwt-api/-impl/-jackson
+             trio, which was also the last thing pulling Jackson 2 onto the classpath. -->
         <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>${jjwt.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>${jjwt.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- jjwt has no Jackson 3 module yet, so this drags Jackson 2 in alongside the
-             Jackson 3 that Spring Boot 4 uses. jjwt-gson avoids the second Jackson. -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>${jjwt.version}</version>
-            <scope>runtime</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
 
         <!--caching-->

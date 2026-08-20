@@ -6,7 +6,7 @@ import TVCIcon from "@/assets/TVC.svg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/auth-context";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, setTokens } from "@/lib/api";
 import { toast } from "sonner";
 
 interface LoginFormData {
@@ -39,7 +39,7 @@ export function LoginForm() {
 			});
 			if (response.ok) {
 				const data = await response.json();
-				localStorage.setItem("accessToken", data.accessToken);
+				setTokens(data.accessToken, data.refreshToken);
 				localStorage.setItem("customerId", data.customerId);
 				login(data.role ?? "USER");
 				navigate({ to: "/" });

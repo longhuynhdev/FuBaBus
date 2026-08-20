@@ -8,6 +8,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/auth-context";
+import { revokeSession } from "@/lib/api";
 
 const navLinkClass =
 	"px-2 sm:mx-2 sm:w-32 pb-1 sm:pb-3 sm:px-2.5 text-center font-semibold text-xs sm:text-base uppercase text-white hover:font-extrabold hover:text-gray-200";
@@ -24,8 +25,8 @@ export function Header() {
 	const { isLoggedIn, isEmployee, userName, logout } = useAuth();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-	const handleLogout = () => {
-		localStorage.removeItem("accessToken");
+	const handleLogout = async () => {
+		await revokeSession();
 		localStorage.removeItem("customerId");
 		logout();
 		window.location.href = "/";

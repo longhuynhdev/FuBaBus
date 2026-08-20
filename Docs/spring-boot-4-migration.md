@@ -13,7 +13,8 @@ Java stays at **25** (Boot 4's baseline is 17, so no toolchain change was needed
 |---|---|---|---|
 | `spring-boot-starter-parent` | 3.5.11 | **4.1.0** | Pulls Spring Framework 7.0.8, Spring Security 7.1.0, Spring Data MongoDB 5.1.0, Spring Data Redis 4.1.0 |
 | `springdoc-openapi-starter-webmvc-ui` | 2.3.0 | **3.1.0** | springdoc 3.x is the Boot 4 line (3.1.0 is itself built against Boot 4.1.0); the 2.x line targets Boot 3 |
-| `jjwt-api` / `-impl` / `-jackson` | 0.11.5 | **0.13.0** | Now versioned from a single `${jjwt.version}` property |
+| `jjwt-api` / `-impl` / `-jackson` | 0.11.5 | **removed** | Briefly moved to 0.13.0, then replaced outright by Spring Security's JWT support — see [the auth rework](./jwt-refresh-token-auth.md) |
+| `spring-boot-starter-oauth2-resource-server` | *(absent)* | **added** | Nimbus-backed `JwtEncoder`/`JwtDecoder` + `BearerTokenAuthenticationFilter` |
 | `lombok` | 1.18.42 (pinned) | **1.18.46** (managed) | Version dropped; inherited from `spring-boot-dependencies` |
 | `swagger-annotations-jakarta` | 2.2.19 (explicit) | **removed** | Arrives transitively at 2.2.52 via springdoc |
 | `spring-boot-starter-validation` | *(absent)* | **added** | See §2.6 |
@@ -117,6 +118,10 @@ General rule for this restructure: `org.springframework.boot.autoconfigure.<tech
 is now `org.springframework.boot.<tech>.autoconfigure.XAutoConfiguration`.
 
 ### 2.3 JJWT 0.11 → 0.13: the whole builder/parser API was replaced
+
+> Superseded: JJWT was subsequently removed altogether (see §4.1). This section is kept
+> because the upgrade path is still what you hit if you migrate a Boot 3 project that keeps
+> JJWT.
 
 The 0.11 setter-style API was removed in 0.12. `JWTGenerator` failed to compile with
 `cannot find symbol: method parserBuilder()`.
@@ -238,22 +243,20 @@ Test data created during verification was removed from the `FuBaBus` database af
 These are pre-existing issues surfaced during the upgrade, left alone to keep the diff
 scoped to the migration.
 
-### 4.1 Replace JJWT with Spring Security's built-in JWT support
+### 4.1 Replace JJWT with Spring Security's built-in JWT support — **done**
 
-Spring Security has shipped first-class JWT encoding/decoding since 5.2 — `JwtEncoder` /
-`JwtDecoder` backed by Nimbus, configured through
-`spring-boot-starter-oauth2-resource-server`. Adopting it would:
+This was applied as a follow-up change and is documented separately in
+[`jwt-refresh-token-auth.md`](./jwt-refresh-token-auth.md). JJWT and the hand-rolled
+`JWTAuthenticationFilter` are gone, replaced by `JwtEncoder`/`JwtDecoder` and
+`BearerTokenAuthenticationFilter`.
 
-- drop the `jjwt-api` / `-impl` / `-jackson` trio entirely;
-- **remove Jackson 2 from the classpath**, since `jjwt-jackson` is the only thing pulling
-  it in (see §2.4) — jjwt has no Jackson 3 module yet;
-- replace the hand-rolled `JWTAuthenticationFilter` with the framework's
-  `BearerTokenAuthenticationFilter`, which also handles error responses per RFC 6750.
-
-This is the single highest-value cleanup available, but it is a real refactor of
-`JWTGenerator`, `JWTAuthenticationFilter` and `SecurityConfig`, so it belongs in its own
-change. If you would rather keep JJWT, swapping `jjwt-jackson` for `jjwt-gson` also gets
-Jackson 2 off the classpath at a much lower cost.
+> **Correction to §2.4.** An earlier draft of this document claimed `jjwt-jackson` was the
+> only thing pulling Jackson 2 onto the classpath. That was wrong: removing jjwt entirely
+> left `jackson-databind:2.21.4` in place, because **`swagger-core-jakarta` (via springdoc)
+> depends on Jackson 2** as well. Jackson 2 annotations are unavoidable regardless —
+> Jackson 3's `tools.jackson.core:jackson-databind` itself depends on
+> `com.fasterxml.jackson.core:jackson-annotations`. Dropping jjwt removed three libraries,
+> but not the second Jackson.
 
 ### 4.2 Both Jedis and Lettuce are on the classpath
 
@@ -276,35 +279,52 @@ If Jedis is a deliberate choice, set `spring.data.redis.client-type=jedis` and e
 No `@EnableCaching` or `@Cacheable` anywhere in the codebase. The starter can be removed
 until caching is actually adopted.
 
-### 4.4 CORS preflight returns 401 (pre-existing, **not** an upgrade regression)
+### 4.4 CORS preflight returned 401 — **fixed**
 
-`OPTIONS /api/buses` with `Origin: http://localhost:5173` returns **401**. This was
-confirmed to behave identically on Boot 3.5.11, so the upgrade did not cause it.
+`OPTIONS /api/buses` with `Origin: http://localhost:5173` returned **401**. Confirmed to
+behave identically on Boot 3.5.11, so the upgrade did not cause it.
 
-The cause is that `WebConfig` registers CORS mappings at the MVC layer, but `SecurityConfig`
-never calls `http.cors(...)`. The Spring Security filter chain therefore rejects the
-unauthenticated preflight before MVC's CORS handling runs. The fix is one line in
-`SecurityConfig`:
+`WebConfig` registered CORS mappings at the MVC layer, but `SecurityConfig` never called
+`http.cors(...)`, so the security filter chain rejected the unauthenticated preflight
+before MVC's CORS handling ran.
 
-```java
-http.cors(Customizer.withDefaults())
-```
+Fixed by making CORS configuration a single shared bean instead of an MVC-only
+registration: `WebConfig` now exposes a `CorsConfigurationSource`, and `SecurityConfig`
+adds `.cors(withDefaults())` to pick it up. Verified: allowed origins get 200 with the
+`Access-Control-Allow-*` headers, unknown origins get 403.
 
-Worth doing if the browser client ever sends a preflight (any request with a custom header
-such as `Authorization`, or a non-simple content type).
+### 4.5 Validation errors surfaced as HTTP 500 — **fixed**
 
-### 4.5 Validation errors surface as HTTP 500
-
-A `@Pattern` violation on `POST /api/auth/register` returns:
+A `@Pattern` violation on `POST /api/auth/register` returned:
 
 ```json
 {"status":500,"error":"register.registerDto.phone: Invalid phone number, ..."}
 ```
 
-The class-level `@Validated` on the controllers turns these into method-validation
-`ConstraintViolationException`s, which bypass the `BindingResult` branch in
-`AuthController.register` and fall through `GlobalExceptionHandler` as a 500. A client
-error should be a 400. Also pre-existing, and independent of the upgrade.
+Class-level `@Validated` opts controllers into the legacy AOP method-validation path, which
+throws `ConstraintViolationException` before the handler method runs. That bypassed the
+`BindingResult` branch in `AuthController.register` and fell through to the catch-all
+handler as a 500. Pre-existing and independent of the upgrade.
+
+Fixed at the root: `@Validated` was removed from the four controllers that carried it. No
+parameter-level constraints exist in this codebase, so it was buying nothing — every
+constrained value arrives via `@Valid @RequestBody`, which produces the normal
+`MethodArgumentNotValidException` that `GlobalExceptionHandler` already mapped to 400.
+(Since Spring Framework 6.1, `@RequestParam`/`@PathVariable` constraints are validated
+without `@Validated` anyway.)
+
+Two safety-net handlers were added so no validation failure can reach the catch-all again:
+`ConstraintViolationException` and `HandlerMethodValidationException`, both → 400.
+
+`AuthController.register` also dropped its `BindingResult` parameter, so registration now
+returns the same 400 shape as every other endpoint instead of a bespoke
+`"Validation errors: [...]"` string.
+
+All request-body violations now return, for example:
+
+```json
+{"error":"phone: Invalid phone number, phone number must start with 0 or +84, followed by exactly 9 digits","status":400}
+```
 
 ---
 

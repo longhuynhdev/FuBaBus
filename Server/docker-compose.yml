@@ -14,6 +14,9 @@ services:
       - MONGODB_URI=${MONGODB_URI}
       - MONGODB_DATABASE=${MONGODB_DATABASE}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
+      # Without this the container generates a random signing key on every start,
+      # logging every user out on each redeploy.
+      - JWT_SECRET=${JWT_SECRET}
     depends_on:
       redis:
         condition: service_healthy

@@ -6,14 +6,12 @@ import org.example.mdmprojectserver.mongodb.dto.TicketResponseDto;
 import org.example.mdmprojectserver.mongodb.model.Ticket;
 import org.example.mdmprojectserver.mongodb.service.TicketService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/tickets")
-@Validated
 public class TicketController {
     private final TicketService ticketService;
 

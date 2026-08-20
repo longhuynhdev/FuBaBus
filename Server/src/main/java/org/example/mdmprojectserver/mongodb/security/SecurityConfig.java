@@ -13,32 +13,32 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
-
-//Everything has been deprecated
-// https://docs.spring.io/spring-security/reference/5.8/migration/servlet/config.html
-
 public class SecurityConfig {
     private JwtAuthEntryPoint authEntryPoint;
     private UserDetailsService userDetailsService;
+    private RoleClaimJwtAuthenticationConverter jwtAuthenticationConverter;
 
 
     @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService, JwtAuthEntryPoint authEntryPoint) {
+    public SecurityConfig(UserDetailsService userDetailsService, JwtAuthEntryPoint authEntryPoint,
+                          RoleClaimJwtAuthenticationConverter jwtAuthenticationConverter) {
         this.userDetailsService = userDetailsService;
         this.authEntryPoint = authEntryPoint;
-
+        this.jwtAuthenticationConverter = jwtAuthenticationConverter;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                // Picks up the CorsConfigurationSource bean from WebConfig. Without this the
+                // filter chain answers CORS preflights with 401 before MVC ever sees them.
+                .cors(withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
@@ -57,13 +57,17 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
+                // BearerTokenAuthenticationFilter reads the Authorization header, verifies the
+                // token with the JwtDecoder, then hands it to our converter for authorities.
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))
+                )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(authEntryPoint)
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -75,10 +79,5 @@ public class SecurityConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public JWTAuthenticationFilter jwtAuthenticationFilter() {
-        return new JWTAuthenticationFilter();
     }
 }

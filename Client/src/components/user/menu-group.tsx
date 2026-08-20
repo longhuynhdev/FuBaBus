@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { History, KeyRound, LogOut, User } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
+import { revokeSession } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 interface MenuItemProps {
@@ -35,8 +36,8 @@ export function MenuGroup() {
 	const { logout } = useAuth();
 	const location = useLocation();
 
-	const handleLogout = () => {
-		localStorage.removeItem("accessToken");
+	const handleLogout = async () => {
+		await revokeSession();
 		localStorage.removeItem("customerId");
 		logout();
 		// Navigation will be handled by the parent component or router
