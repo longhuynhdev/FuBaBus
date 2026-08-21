@@ -1,16 +1,44 @@
 # Buses API Endpoint
-## Get all buses
+# NOTE: POST/PUT/DELETE below require role EMPLOYEE or ADMIN (see SecurityConfig).
+# /api/auth/register always creates a USER. Promote a test account to EMPLOYEE/ADMIN
+# directly in Mongo first, e.g.:
+#   db.customer.updateOne({phone: "0888703040"}, {$set: {role: "ADMIN"}})
+@currentDate = {{$datetime "YYYY-MM-DD"}}
+@tomorrowDate = {{$datetime "YYYY-MM-DD" 1 d}}
+
+## Login as EMPLOYEE/ADMIN - captures accessToken for create/update/delete below
+# @name login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "phone": "0123456789",
+  "password": "admin123"
+}
+###
+## Get all buses (paginated, public)
 GET http://localhost:8080/api/buses
+###
+## Get all buses - page 2, 5 per page
+GET http://localhost:8080/api/buses?page=1&size=5
 ###
 ## Get a specific bus by ID
 @busid=69a55380c527dc545010b6ce
 GET http://localhost:8080/api/buses/{{busid}}
 ###
-## Create a new bus
-@currentDate = {{$datetime "YYYY-MM-DD"}}
-@tomorrowDate = {{$datetime "YYYY-MM-DD" 1 d}}
-
+## Get a bus by a non-existent ID (expect 404/500)
+GET http://localhost:8080/api/buses/000000000000000000000000
+###
+## Search buses - basic route + date
+GET http://localhost:8080/api/buses/search?departureLocation=TP. Hồ Chí Minh&arrivalLocation=Khánh Hòa&departureTime={{currentDate}}
+###
+## Search buses - with sort and filters
+GET http://localhost:8080/api/buses/search?departureLocation=TP. Hồ Chí Minh&arrivalLocation=Khánh Hòa&departureTime={{currentDate}}&sortByFare=ASCENDING&sortByDepartureTime=DESCENDING&busType=LIMOUSINE&timeType=NIGHT
+###
+## Create a new bus (requires EMPLOYEE/ADMIN)
+# @name createBus
 POST http://localhost:8080/api/buses
+Authorization: Bearer {{login.response.body.$.accessToken}}
 Content-Type: application/json
 
 {
@@ -36,3 +64,73 @@ Content-Type: application/json
         ],
     "busType": "GHẾ"
 }
+###
+## Create a new bus - no auth token (expect 401/403)
+POST http://localhost:8080/api/buses
+Content-Type: application/json
+
+{
+    "departureTime": "{{currentDate}}:23:00",
+    "departureLocation": "TP. Hồ Chí Minh",
+    "arrivalTime": "{{tomorrowDate}}:08:00",
+    "arrivalLocation": "Khánh Hòa",
+    "fare": 295000,
+    "boardingPoints": ["Bến xe An Sương"],
+    "droppingPoints": ["Bến Lội"],
+    "busType": "GHẾ"
+}
+###
+## Create multiple buses in bulk (requires EMPLOYEE/ADMIN)
+POST http://localhost:8080/api/buses/bulk
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+[
+    {
+        "departureTime": "{{currentDate}}:20:00",
+        "departureLocation": "TP. Hồ Chí Minh",
+        "arrivalTime": "{{tomorrowDate}}:04:00",
+        "arrivalLocation": "Đà Lạt",
+        "fare": 250000,
+        "boardingPoints": ["Bến xe An Sương", "BX Miền Đông Mới"],
+        "droppingPoints": ["Bến xe Đà Lạt"],
+        "busType": "GIƯỜNG"
+    },
+    {
+        "departureTime": "{{currentDate}}:21:30",
+        "departureLocation": "TP. Hồ Chí Minh",
+        "arrivalTime": "{{tomorrowDate}}:06:00",
+        "arrivalLocation": "Nha Trang",
+        "fare": 320000,
+        "boardingPoints": ["BX Miền Đông"],
+        "droppingPoints": ["Bến xe phía Nam Nha Trang"],
+        "busType": "LIMOUSINE"
+    }
+]
+###
+## Update a bus (requires EMPLOYEE/ADMIN)
+PUT http://localhost:8080/api/buses/{{createBus.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+    "departureTime": "{{currentDate}}:23:00",
+    "departureLocation": "TP. Hồ Chí Minh",
+    "arrivalTime": "{{tomorrowDate}}:08:00",
+    "arrivalLocation": "Khánh Hòa",
+    "fare": 310000,
+    "boardingPoints": [
+        "Bến xe An Sương",
+        "BX Miền Đông Mới"
+        ],
+    "droppingPoints": [
+        "Bến Lội",
+        "Bến xe Phía Nam"
+        ],
+    "busType": "GHẾ",
+    "status": "FULLY_BOOKED"
+}
+###
+## Delete a bus (requires EMPLOYEE/ADMIN)
+DELETE http://localhost:8080/api/buses/{{createBus.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.accessToken}}

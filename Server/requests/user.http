@@ -4,16 +4,82 @@ Content-Type: application/json
 
 {
   "name": "Huỳnh Thế Long",
-  "phone": "+84123456789",
+  "phone": "0888703040",
   "password": "Pass123@",
   "email": "longhuynh@fubabus.com"
 }
 ###
-## Login
+## Register - duplicate phone (expect 400 Bad Request)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Huỳnh Thế Long",
+  "phone": "0888703040",
+  "password": "Pass123@",
+  "email": "longhuynh2@fubabus.com"
+}
+###
+## Register - invalid phone format (expect 400, fails @Pattern validation)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Invalid Phone",
+  "phone": "12345",
+  "password": "Pass123@",
+  "email": "invalid@fubabus.com"
+}
+###
+## Login - captures accessToken/refreshToken for the requests below
+# @name login
 POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "phone": "0123456789",
+  "phone": "0888703040",
   "password": "Pass123@"
-}   
+}
+###
+## Login - wrong password (expect 401 Unauthorized)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "phone": "0888703040",
+  "password": "WrongPass123@"
+}
+###
+## Login - unknown phone (expect 401 Unauthorized)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "phone": "0999999999",
+  "password": "Pass123@"
+}
+###
+## Refresh - exchange refresh token for a new access token (rotates the refresh token)
+# @name refresh
+POST http://localhost:8080/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{login.response.body.$.refreshToken}}"
+}
+###
+## Refresh - invalid/expired token (expect 401 Unauthorized)
+POST http://localhost:8080/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "not-a-real-refresh-token"
+}
+###
+## Logout - revokes the refresh token (expect 204 No Content)
+POST http://localhost:8080/api/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refresh.response.body.$.refreshToken}}"
+}

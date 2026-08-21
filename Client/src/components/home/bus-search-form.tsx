@@ -45,16 +45,21 @@ export function BusSearchForm({ onSearch }: BusSearchFormProps) {
 
 	useEffect(() => {
 		apiFetch("/api/buses")
-			.then((res) => (res.ok ? res.json() : []))
-			.then((buses: { departureLocation: string; arrivalLocation: string }[]) => {
-				const unique = [
-					...new Set([
-						...buses.map((b) => b.departureLocation),
-						...buses.map((b) => b.arrivalLocation),
-					]),
-				];
-				setLocations(unique);
-			})
+			.then((res) => (res.ok ? res.json() : { content: [] }))
+			.then(
+				(data: {
+					content: { departureLocation: string; arrivalLocation: string }[];
+				}) => {
+					const buses = data.content ?? [];
+					const unique = [
+						...new Set([
+							...buses.map((b) => b.departureLocation),
+							...buses.map((b) => b.arrivalLocation),
+						]),
+					];
+					setLocations(unique);
+				},
+			)
 			.catch(() => {});
 	}, []);
 

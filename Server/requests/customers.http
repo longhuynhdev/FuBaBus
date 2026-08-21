@@ -1,0 +1,88 @@
+# Customers API Endpoint
+# NOTE: all endpoints below require an authenticated user; DELETE requires EMPLOYEE/ADMIN.
+
+## Login - captures accessToken
+# @name login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "phone": "0888703040",
+  "password": "Pass123@"
+}
+###
+## Get all customers (paginated)
+GET http://localhost:8080/api/customers
+Authorization: Bearer {{login.response.body.$.accessToken}}
+###
+## Get all customers - page 1, 10 per page
+GET http://localhost:8080/api/customers?page=0&size=10
+Authorization: Bearer {{login.response.body.$.accessToken}}
+###
+## Get a specific customer by ID
+GET http://localhost:8080/api/customers/{{login.response.body.$.customerId}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
+###
+## Get a customer by a non-existent ID (expect 404/500)
+GET http://localhost:8080/api/customers/000000000000000000000000
+Authorization: Bearer {{login.response.body.$.accessToken}}
+###
+## Update a customer
+PUT http://localhost:8080/api/customers/{{login.response.body.$.customerId}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Huỳnh Thế Long",
+  "gender": "MALE",
+  "email": "longhuynh@fubabus.com",
+  "phone": "0888703040",
+  "address": "123 Nguyễn Trãi, Quận 1, TP. Hồ Chí Minh",
+  "job": "Software Engineer"
+}
+###
+## Update a customer - invalid email (expect 400, fails @Email validation)
+PUT http://localhost:8080/api/customers/{{login.response.body.$.customerId}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Huỳnh Thế Long",
+  "gender": "MALE",
+  "email": "not-an-email",
+  "phone": "0888703040"
+}
+###
+## Change password
+PUT http://localhost:8080/api/customers/{{login.response.body.$.customerId}}/password
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "currentPassword": "Pass123@",
+  "newPassword": "NewPass456@"
+}
+###
+## Change password - wrong current password (expect 400/401)
+PUT http://localhost:8080/api/customers/{{login.response.body.$.customerId}}/password
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "currentPassword": "WrongCurrent@",
+  "newPassword": "NewPass456@"
+}
+###
+## Change password - too short (expect 400, fails @Size validation)
+PUT http://localhost:8080/api/customers/{{login.response.body.$.customerId}}/password
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "currentPassword": "Pass123@",
+  "newPassword": "123"
+}
+###
+## Delete a customer (requires EMPLOYEE/ADMIN)
+DELETE http://localhost:8080/api/customers/{{login.response.body.$.customerId}}
+Authorization: Bearer {{login.response.body.$.accessToken}}

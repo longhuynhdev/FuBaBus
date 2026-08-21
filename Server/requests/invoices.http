@@ -1,0 +1,74 @@
+# Invoices API Endpoint
+# NOTE: everything except GET /phone/{phone}/invoice-id/{invoice-id} requires authentication;
+# DELETE requires EMPLOYEE/ADMIN.
+
+## Login - captures accessToken
+# @name login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "phone": "0888703040",
+  "password": "Pass123@"
+}
+###
+## Get all invoices
+GET http://localhost:8080/api/invoices
+Authorization: Bearer {{login.response.body.$.accessToken}}
+###
+## Get a specific invoice by ID
+@invoiceid=69a55380c527dc545010b6ce
+GET http://localhost:8080/api/invoices/{{invoiceid}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
+###
+## Get an invoice by phone + invoice ID (public - used for guest invoice lookup)
+GET http://localhost:8080/api/invoices/phone/0888703040/invoice-id/{{invoiceid}}
+###
+## Create a new invoice
+# @name createInvoice
+POST http://localhost:8080/api/invoices
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Huỳnh Thế Long",
+  "phone": "0888703040",
+  "email": "longhuynh@fubabus.com",
+  "price": 590000,
+  "paymentMethod": "CREDIT_CARD",
+  "status": "PAID",
+  "buses": "TP. Hồ Chí Minh - Khánh Hòa",
+  "time": "23:00 21/08/2026",
+  "seats": "A1, A2",
+  "licensePlates": "51B-123.45",
+  "boardingPoint": "Bến xe An Sương"
+}
+###
+## Create a new invoice - missing name (expect 400, fails @NotEmpty validation)
+POST http://localhost:8080/api/invoices
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "phone": "0888703040",
+  "email": "longhuynh@fubabus.com",
+  "price": 590000,
+  "paymentMethod": "CREDIT_CARD"
+}
+###
+## Create a new invoice - invalid email (expect 400, fails @Email validation)
+POST http://localhost:8080/api/invoices
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Huỳnh Thế Long",
+  "phone": "0888703040",
+  "email": "not-an-email",
+  "price": 590000,
+  "paymentMethod": "CREDIT_CARD"
+}
+###
+## Delete an invoice (requires EMPLOYEE/ADMIN)
+DELETE http://localhost:8080/api/invoices/{{createInvoice.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.accessToken}}

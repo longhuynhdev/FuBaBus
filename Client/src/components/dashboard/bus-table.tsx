@@ -1,12 +1,12 @@
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { BusFormDialog } from "@/components/dashboard/bus-form-dialog";
 import { DataTable } from "@/components/dashboard/data-table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { apiFetch } from "@/lib/api";
 import { formatVND, getStatusLabel, getStatusVariant } from "@/lib/utils";
-import { toast } from "sonner";
 
 interface Bus {
 	id: string;
@@ -33,17 +33,36 @@ function formatDateTime(iso: string): string {
 	});
 }
 
+const PAGE_SIZE = 20;
+
 export function BusTable() {
 	const [buses, setBuses] = useState<Bus[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [editingBus, setEditingBus] = useState<Bus | null>(null);
+	const [page, setPage] = useState(0);
+	const [totalPages, setTotalPages] = useState(0);
+	const [totalElements, setTotalElements] = useState(0);
 
-	const fetchBuses = async () => {
+	const fetchBuses = async (targetPage = page) => {
 		setLoading(true);
 		try {
-			const res = await apiFetch("/api/buses");
-			if (res.ok) setBuses(await res.json());
+			const res = await apiFetch(
+				`/api/buses?page=${targetPage}&size=${PAGE_SIZE}`,
+			);
+			if (res.ok) {
+				const data = await res.json();
+				if (Array.isArray(data)) {
+					setBuses(data);
+					setTotalPages(1);
+					setTotalElements(data.length);
+				} else {
+					setBuses(data.content ?? []);
+					setTotalPages(data.totalPages ?? 0);
+					setTotalElements(data.totalElements ?? 0);
+				}
+				setPage(targetPage);
+			}
 		} catch {
 			toast.error("Không thể tải danh sách xe");
 		} finally {
@@ -52,7 +71,8 @@ export function BusTable() {
 	};
 
 	useEffect(() => {
-		fetchBuses();
+		fetchBuses(0);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleDelete = async (id: string) => {
@@ -83,8 +103,7 @@ export function BusTable() {
 	const columns = [
 		{
 			header: "Tuyến",
-			cell: (row: Bus) =>
-				`${row.departureLocation} → ${row.arrivalLocation}`,
+			cell: (row: Bus) => `${row.departureLocation} → ${row.arrivalLocation}`,
 		},
 		{
 			header: "Giờ đi",
@@ -122,11 +141,7 @@ export function BusTable() {
 			header: "Thao tác",
 			cell: (row: Bus) => (
 				<div className="flex gap-1">
-					<Button
-						variant="ghost"
-						size="icon"
-						onClick={() => handleEdit(row)}
-					>
+					<Button variant="ghost" size="icon" onClick={() => handleEdit(row)}>
 						<Pencil className="h-4 w-4" />
 					</Button>
 					<Button
@@ -152,7 +167,17 @@ export function BusTable() {
 					Thêm xe
 				</Button>
 			</div>
-			<DataTable columns={columns} data={buses} isLoading={loading} />
+			<DataTable
+				columns={columns}
+				data={buses}
+				isLoading={loading}
+				pagination={{
+					page,
+					totalPages,
+					totalElements,
+					onPageChange: fetchBuses,
+				}}
+			/>
 			<BusFormDialog
 				open={dialogOpen}
 				onOpenChange={setDialogOpen}

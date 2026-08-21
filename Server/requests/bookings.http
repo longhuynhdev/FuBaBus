@@ -1,0 +1,82 @@
+# Bookings API Endpoint (Redis-backed temporary hold, see redis/BookingService)
+# All endpoints are public. A booked ticket is held in Redis for 30s (see
+# KeyExpirationListener) - confirm it quickly or the seat is released automatically.
+@currentDate = {{$datetime "YYYY-MM-DD"}}
+@tomorrowDate = {{$datetime "YYYY-MM-DD" 1 d}}
+
+## Login as EMPLOYEE/ADMIN to seed a bus for booking against (see buses.http note on roles)
+# @name login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "phone": "0888703040",
+  "password": "Pass123@"
+}
+###
+## Seed a bus to book against
+# @name createBus
+POST http://localhost:8080/api/buses
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+    "departureTime": "{{currentDate}}:23:00",
+    "departureLocation": "TP. Hồ Chí Minh",
+    "arrivalTime": "{{tomorrowDate}}:08:00",
+    "arrivalLocation": "Khánh Hòa",
+    "fare": 295000,
+    "boardingPoints": ["Bến xe An Sương"],
+    "droppingPoints": ["Bến Lội"],
+    "busType": "GHẾ"
+}
+###
+## Book a ticket as a guest (no customerId - looked up/created by phone)
+POST http://localhost:8080/api/bookings
+Content-Type: application/json
+
+{
+  "busId": "{{createBus.response.body.$.id}}",
+  "seats": ["A1", "A2"],
+  "totalFare": 590000,
+  "boardingPoint": "Bến xe An Sương",
+  "droppingPoint": "Bến Lội",
+  "name": "Nguyễn Văn Khách",
+  "phone": "0912345678",
+  "email": "khach@example.com"
+}
+###
+## Book a ticket as a logged-in customer (customerId supplied)
+POST http://localhost:8080/api/bookings
+Content-Type: application/json
+
+{
+  "busId": "{{createBus.response.body.$.id}}",
+  "customerId": "{{login.response.body.$.customerId}}",
+  "seats": ["A3"],
+  "totalFare": 295000,
+  "boardingPoint": "Bến xe An Sương",
+  "droppingPoint": "Bến Lội",
+  "name": "Huỳnh Thế Long",
+  "phone": "0888703040",
+  "email": "longhuynh@fubabus.com"
+}
+###
+## Book a ticket - missing name (expect 400, fails @NotEmpty validation)
+POST http://localhost:8080/api/bookings
+Content-Type: application/json
+
+{
+  "busId": "{{createBus.response.body.$.id}}",
+  "seats": ["A4"],
+  "totalFare": 295000,
+  "boardingPoint": "Bến xe An Sương",
+  "droppingPoint": "Bến Lội",
+  "phone": "0912345678"
+}
+###
+## Confirm booking - guest, before the 30s TTL expires
+POST http://localhost:8080/api/bookings/confirmation?busId={{createBus.response.body.$.id}}&customerId={{login.response.body.$.customerId}}&paymentMethod=CASH
+###
+## Confirm booking - no matching pending booking (expect 500 / error body)
+POST http://localhost:8080/api/bookings/confirmation?busId=000000000000000000000000&customerId=000000000000000000000000
